@@ -1,0 +1,97 @@
+/*
+ * UO Wildlands Custom Script
+ * Derived from ServUO Core
+ * Compiled & Modified by: [Feng / UO Wildlands Team]
+ * * Licensed under the GNU General Public License v3.0 (GPL-3.0)
+ */
+using System;
+
+namespace Server.Mobiles
+{
+    [CorpseName("a daemon corpse")]
+    public class SummonedDaemon : BaseCreature
+    {
+        [Constructable]
+        public SummonedDaemon()
+            : base(AIType.AI_Mage, FightMode.Closest, 10, 1, 0.2, 0.4)
+        {
+            this.Name = NameList.RandomName("daemon");
+            this.Body = 9;
+            this.Hue = 532;
+	    this.BaseSoundID = 357;
+
+            this.SetStr(800);
+            this.SetDex(200);
+            this.SetInt(150);
+
+  	    this.SetHits(1000);          
+	    this.SetDamage(14, 21);
+
+            this.SetDamageType(ResistanceType.Physical, 0);
+            this.SetDamageType(ResistanceType.Poison, 100);
+
+            this.SetResistance(ResistanceType.Physical, 65, 70);
+            this.SetResistance(ResistanceType.Fire, 50, 60);
+            this.SetResistance(ResistanceType.Cold, 20, 30);
+            this.SetResistance(ResistanceType.Poison, 100);
+            this.SetResistance(ResistanceType.Energy, 40, 50);
+
+            this.SetSkill(SkillName.EvalInt, 120.0);
+            this.SetSkill(SkillName.Meditation, 90.1, 100.0);
+            this.SetSkill(SkillName.Magery, 120.0);
+            this.SetSkill(SkillName.MagicResist, 90.1, 100.0);
+            this.SetSkill(SkillName.Tactics, 100.0);
+            this.SetSkill(SkillName.Wrestling, 98.1, 99.0);
+
+
+            this.VirtualArmor = 58;
+            this.ControlSlots = 4;
+	    this.IsBonded = true;
+        }
+
+        public SummonedDaemon(Serial serial)
+            : base(serial)
+        {
+        }
+
+        public override double DispelDifficulty
+        {
+            get
+            {
+                return 125.0;
+            }
+        }
+        public override double DispelFocus
+        {
+            get
+            {
+                return 45.0;
+            }
+        }
+        public override Poison PoisonImmune
+        {
+            get
+            {
+                return Poison.Regular;
+            }
+        }// TODO: Immune to poison?
+        public override bool CanFly
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write((int)0);
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+            int version = reader.ReadInt();
+        }
+    }
+}

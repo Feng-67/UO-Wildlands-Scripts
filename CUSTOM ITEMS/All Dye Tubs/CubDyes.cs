@@ -5,6 +5,8 @@
  * * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  */
 using System;
+using Server.Engines.Plants;
+using Server.Multis;
 using Server.Targeting;
 
 namespace Server.Items
@@ -72,23 +74,53 @@ namespace Server.Items
             protected override void OnTarget(Mobile from, object targeted)
             {
                 Item item = targeted as Item;
-                if (item != null && item.IsChildOf(from.Backpack))
-                {
-                    // Logic to prevent dyeing other dyes, similar to CompassionPigment.cs
-                    if (item is BaseCubStoreDye || item is CompassionPigment)
-                    {
-                        from.SendLocalizedMessage(1042083); // You cannot dye that.
-                        return;
-                    }
 
+                if (item == null)
+                {
+                    from.SendLocalizedMessage(1042083); // You cannot dye that.
+                    return;
+                }
+
+                if (!item.IsChildOf(from.Backpack))
+                {
+                    from.SendLocalizedMessage(1062334); // This item must be in your backpack to be used.
+                    return;
+                }
+
+                if (item is HoodedShroudOfShadows || item is MonkRobe)
+                {
+                    from.SendLocalizedMessage(1042083); // You cannot dye that.
+                    return;
+                }
+
+                bool valid = (item is IDyable || item is BaseTalisman ||
+                    item is BaseBook || item is BaseClothing ||
+                    item is BaseJewel || item is BaseStatuette ||
+                    item is BaseWeapon || item is Runebook ||
+                    item is Spellbook || item is DecorativePlant || item is ShoulderParrot ||
+                    item.IsArtifact || BasePigmentsOfTokuno.IsValidItem(item));
+
+                if (!valid && item is BaseArmor)
+                {
+                    CraftResourceType restype = CraftResources.GetType(((BaseArmor)item).Resource);
+                    if ((CraftResourceType.Leather == restype || CraftResourceType.Metal == restype) &&
+                        ArmorMaterialType.Bone != ((BaseArmor)item).MaterialType)
+                    {
+                        valid = true;
+                    }
+                }
+
+                if (valid)
+                {
                     item.Hue = m_Dye.Hue;
+                    from.PlaySound(0x23E);
                     m_Dye.UsesRemaining--;
                     if (m_Dye.UsesRemaining <= 0)
                         m_Dye.Delete();
                 }
                 else
                 {
-                    from.SendLocalizedMessage(1062334); // This item must be in your backpack to be used.
+                    from.SendLocalizedMessage(1042083); // You cannot dye that.
                 }
             }
         }

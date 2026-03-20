@@ -2,7 +2,14 @@
  * UO Wildlands Custom Script
  * Derived from ServUO Core and Community scripts (Original Author Voxpire)
  * Compiled & Modified by: [Feng / UO Wildlands Team]
- * * Licensed under the GNU General Public License v3.0 (GPL-3.0)
+ * Licensed under the GNU General Public License v3.0 (GPL-3.0)
+ *
+ * Consolidated file — contains:
+ *   TownHouseState / TownHouseWipePolicy enums  (was TownHouseSupport.cs)
+ *   TownHouseUtil / TownHouseHighlightTile       (was TownHouseSupport.cs)
+ *   TownHouseRegion                              (was TownHouseRegion.cs)
+ *   TownHouseBoundsTarget1/2                     (was TownHouseGMTools.cs)
+ *   TownHouseController                          (was TownHouseController.cs)
  */
 using System;
 using System.Collections.Generic;
@@ -10,10 +17,275 @@ using Server;
 using Server.Gumps;
 using Server.Items;
 using Server.Mobiles;
+using Server.Regions;
 using Server.Targeting;
 
 namespace Server.Custom.TownHouses
 {
+    // -------------------------------------------------------------------------
+    // ENUMS  (TownHouseSupport.cs)
+    // -------------------------------------------------------------------------
+
+    public enum TownHouseState
+    {
+        Purchasable,
+        Rentable,
+        Transferable
+    }
+
+    public enum TownHouseWipePolicy
+    {
+        LeaveAsIs,
+        WipeItemsInBounds
+    }
+
+    // -------------------------------------------------------------------------
+    // UTILITIES  (TownHouseSupport.cs)
+    // -------------------------------------------------------------------------
+
+    public static class TownHouseUtil
+    {
+        public static Rectangle2D MakeRect(Point3D a, Point3D b)
+        {
+            int x1 = Math.Min(a.X, b.X);
+            int y1 = Math.Min(a.Y, b.Y);
+            int x2 = Math.Max(a.X, b.X);
+            int y2 = Math.Max(a.Y, b.Y);
+
+            return new Rectangle2D(x1, y1, (x2 - x1) + 1, (y2 - y1) + 1);
+        }
+
+        public static bool HasBounds(Rectangle2D r)
+        {
+            return r.Width > 0 && r.Height > 0;
+        }
+
+        public static bool In3DRange(Point3D p, Rectangle2D r, int minZ, int maxZ)
+        {
+            if (!r.Contains(p))
+                return false;
+
+            return p.Z >= minZ && p.Z <= maxZ;
+        }
+
+        public static void ForEachItemInBounds(Map map, Rectangle2D rect, int minZ, int maxZ, Action<Item> action)
+        {
+            if (map == null || map == Map.Internal || !HasBounds(rect))
+                return;
+
+            IPooledEnumerable eable = map.GetItemsInBounds(rect);
+            try
+            {
+                foreach (Item item in eable)
+                {
+                    if (item == null || item.Deleted)
+                        continue;
+
+                    if (!In3DRange(item.Location, rect, minZ, maxZ))
+                        continue;
+
+                    action(item);
+                }
+            }
+            finally
+            {
+                eable.Free();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Temporary highlight tile used for GM visualization. Auto-deletes after Duration.
+    /// </summary>
+    public class TownHouseHighlightTile : Item
+    {
+        private Timer m_Timer;
+
+        public override bool Decays { get { return false; } }
+
+        [Constructable]
+        public TownHouseHighlightTile() : base(0x1766)
+        {
+            Movable = false;
+            Hue = 1266;
+            Name = "boundary marker";
+        }
+
+        public TownHouseHighlightTile(Serial serial) : base(serial) { }
+
+        public void Start(TimeSpan duration)
+        {
+            Stop();
+            m_Timer = Timer.DelayCall(duration, Delete);
+            m_Timer.Start();
+        }
+
+        public void Stop()
+        {
+            if (m_Timer != null)
+            {
+                m_Timer.Stop();
+                m_Timer = null;
+            }
+        }
+
+        public override void OnDelete()
+        {
+            Stop();
+            base.OnDelete();
+        }
+
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write(0);
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+            reader.ReadInt();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // REGION  (TownHouseRegion.cs)
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Region wrapper for inside checks, ban checks, and secured container access.
+    /// </summary>
+    public class TownHouseRegion : Region
+    {
+        public TownHouseController Controller { get; private set; }
+
+        public TownHouseRegion(TownHouseController controller)
+            : base(controller.RegionName, controller.Map, controller.RegionPriority,
+                   new Rectangle3D(
+                       controller.Rect.X,
+                       controller.Rect.Y,
+                       controller.MinZ,
+                       controller.Rect.Width,
+                       controller.Rect.Height,
+                       controller.MaxZ - controller.MinZ + 1))
+        {
+            Controller = controller;
+        }
+
+        public override TimeSpan GetLogoutDelay(Mobile m)
+        {
+            return TimeSpan.Zero;
+        }
+
+        public override bool OnMoveInto(Mobile m, Direction d, Point3D newLocation, Point3D oldLocation)
+        {
+            if (Controller != null && Controller.IsBanned(m))
+                return false;
+
+            return base.OnMoveInto(m, d, newLocation, oldLocation);
+        }
+
+        /// <summary>
+        /// Blocks non-friends from opening secured containers inside the town house.
+        /// </summary>
+        public override bool OnDoubleClick(Mobile from, object o)
+        {
+            if (Controller == null || Controller.Deleted)
+                return base.OnDoubleClick(from, o);
+
+            if (from.AccessLevel >= AccessLevel.GameMaster)
+                return base.OnDoubleClick(from, o);
+
+            Container c = o as Container;
+            if (c != null && Controller.Secures.Contains(c))
+            {
+                if (!Controller.IsFriend(from))
+                {
+                    from.SendMessage("That container is secured. You do not have access.");
+                    return false;
+                }
+            }
+
+            return base.OnDoubleClick(from, o);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // GM BOUND-SETTING TARGETS  (TownHouseGMTools.cs)
+    // -------------------------------------------------------------------------
+
+    public class TownHouseBoundsTarget1 : Target
+    {
+        private readonly Mobile m_GM;
+        private readonly TownHouseController m_Controller;
+
+        public TownHouseBoundsTarget1(Mobile gm, TownHouseController c) : base(18, true, TargetFlags.None)
+        {
+            m_GM = gm;
+            m_Controller = c;
+        }
+
+        protected override void OnTarget(Mobile from, object targeted)
+        {
+            if (m_Controller == null || m_Controller.Deleted)
+                return;
+
+            IPoint3D p = targeted as IPoint3D;
+
+            if (p == null)
+                return;
+
+            Point3D p1 = new Point3D(p);
+            from.SendMessage("Corner 1 set. Target corner 2.");
+            from.Target = new TownHouseBoundsTarget2(m_GM, m_Controller, p1);
+        }
+    }
+
+    public class TownHouseBoundsTarget2 : Target
+    {
+        private readonly Mobile m_GM;
+        private readonly TownHouseController m_Controller;
+        private readonly Point3D m_P1;
+
+        public TownHouseBoundsTarget2(Mobile gm, TownHouseController c, Point3D p1) : base(18, true, TargetFlags.None)
+        {
+            m_GM = gm;
+            m_Controller = c;
+            m_P1 = p1;
+        }
+
+        protected override void OnTarget(Mobile from, object targeted)
+        {
+            if (m_Controller == null || m_Controller.Deleted)
+                return;
+
+            IPoint3D p = targeted as IPoint3D;
+
+            if (p == null)
+                return;
+
+            Point3D p2 = new Point3D(p);
+            Rectangle2D rect = TownHouseUtil.MakeRect(m_P1, p2);
+
+            int minZ = m_Controller.MinZ;
+            int maxZ = m_Controller.MaxZ;
+
+            if (!m_Controller.HasBounds)
+            {
+                minZ = from.Z - 20;
+                maxZ = from.Z + 60;
+            }
+
+            m_Controller.SetBounds(rect, minZ, maxZ, "TownHouse_" + m_Controller.Serial.Value);
+
+            from.SendMessage(string.Format("Bounds set: {0}. ZRange: {1}..{2}", rect, minZ, maxZ));
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // CONTROLLER
+    // -------------------------------------------------------------------------
+
     public class TownHouseController : Item
     {
         // Identity / region
@@ -75,7 +347,9 @@ namespace Server.Custom.TownHouses
             Movable = true;
 
             RegionName = "TownHouse";
-            RegionPriority = 50;
+            // Priority 60 beats GuardedRegion/TownRegion (both 50) so ban checks
+            // and secured container access in TownHouseRegion are correctly consulted.
+            RegionPriority = 60;
 
             Rect = new Rectangle2D(0, 0, 0, 0);
             MinZ = -128;
@@ -129,18 +403,10 @@ namespace Server.Custom.TownHouses
 
         public override void OnSingleClick(Mobile from)
         {
-            // Do not call base.OnSingleClick to avoid default item label if we want custom ones
-            // But usually calling base is fine if we just want to send a message.
-            // Here we want the overhead name to be specific.
-            
             if (from == null) return;
-
-            // Send the standard item name first (or custom overhead)
-            // LabelTo(from, Name); 
 
             if (Owner == null)
             {
-                // Server Sale
                 if (State == TownHouseState.Purchasable)
                     LabelTo(from, string.Format("For Sale: {0:N0} gp", PurchasePrice));
                 else
@@ -148,45 +414,34 @@ namespace Server.Custom.TownHouses
             }
             else
             {
-                // Player Sale
                 if (IsForSale)
-                {
                     LabelTo(from, string.Format("Owned by {0} (For Sale: {1:N0} gp)", Owner.Name, OwnerSalePrice));
-                }
                 else
-                {
                     LabelTo(from, string.Format("The Home of {0}", Owner.Name));
-                }
             }
         }
 
- public override void GetProperties(ObjectPropertyList list)
-{
-    base.GetProperties(list);
+        public override void GetProperties(ObjectPropertyList list)
+        {
+            base.GetProperties(list);
 
-    if (Owner == null)
-    {
-        // Status: Unclaimed
-        list.Add(1060659, "Status\tUnclaimed");
-    }
-    else
-    {
-        if (IsForSale)
-        {
-            // Status: FOR SALE BY OWNER
-            list.Add(1060659, "Status\tFOR SALE BY OWNER");
-            
-            // This displays as: "100,000 GP"
-            // We use 1070722 because it is a generic "~1_val~" cliloc with no built-in labels or colons.
-            list.Add(1070722, string.Format("{0:N0} GP", OwnerSalePrice));
+            if (Owner == null)
+            {
+                list.Add(1060659, "Status\tUnclaimed");
+            }
+            else
+            {
+                if (IsForSale)
+                {
+                    list.Add(1060659, "Status\tFOR SALE BY OWNER");
+                    list.Add(1070722, string.Format("{0:N0} GP", OwnerSalePrice));
+                }
+                else
+                {
+                    list.Add(1060659, "Status\tPrivate Residence");
+                }
+            }
         }
-        else
-        {
-            // Status: Private Residence
-            list.Add(1060659, "Status\tPrivate Residence");
-        }
-    }
-}
 
         public override void OnDoubleClick(Mobile from)
         {
@@ -220,7 +475,6 @@ namespace Server.Custom.TownHouses
         public bool IsCoOwner(Mobile m)
         {
             if (m == null) return false;
-            // CoOwner list check first, then Account check
             return CoOwners.Contains(m) || SameAccount(Owner, m);
         }
 
@@ -290,20 +544,14 @@ namespace Server.Custom.TownHouses
         }
 
         public void CycleState()
-{
-    // If we are currently Purchasable, skip Rentable and go straight to Transferable
-    if (this.State == TownHouseState.Purchasable)
-    {
-        this.State = TownHouseState.Transferable;
-    }
-    else
-    {
-        // If we are Transferable (or somehow stuck in Rentable), go back to Purchasable
-        this.State = TownHouseState.Purchasable;
-    }
+        {
+            if (this.State == TownHouseState.Purchasable)
+                this.State = TownHouseState.Transferable;
+            else
+                this.State = TownHouseState.Purchasable;
 
-    InvalidateProperties();
-}
+            InvalidateProperties();
+        }
 
         public void ToggleWipePolicy()
         {
@@ -353,9 +601,6 @@ namespace Server.Custom.TownHouses
             return true;
         }
 
-        // Deprecated method stub for safety
-        public bool TryRent(Mobile renter) { return false; }
-
         private void AssignOwner(Mobile m)
         {
             Owner = m;
@@ -380,6 +625,7 @@ namespace Server.Custom.TownHouses
             Mobile oldOwner = Owner;
 
             Owner = null;
+            State = TownHouseState.Purchasable;
             CoOwners.Clear();
             Friends.Clear();
             Bans.Clear();
@@ -387,9 +633,21 @@ namespace Server.Custom.TownHouses
             OwnerSaleActive = false;
             OwnerSalePrice = 0;
 
-            MoveAllMovablesToCrate();
+            // Clear ownership flags but leave items immovable in place for the next owner
+            foreach (Item item in Lockdowns)
+            {
+                if (item != null && !item.Deleted)
+                    item.IsLockedDown = false;
+            }
 
             Lockdowns.Clear();
+
+            foreach (Container c in Secures)
+            {
+                if (c != null && !c.Deleted)
+                    c.IsSecure = false;
+            }
+
             Secures.Clear();
 
             if (WipePolicy == TownHouseWipePolicy.WipeItemsInBounds)
@@ -410,61 +668,9 @@ namespace Server.Custom.TownHouses
             TownHouseUtil.ForEachItemInBounds(Map, Rect, MinZ, MaxZ, delegate(Item item)
             {
                 if (item == null || item.Deleted || item == this) return;
-                if (item is TownHouseHighlightTile || item is TownHouseMovingCrate) return;
+                if (item is TownHouseHighlightTile) return;
                 item.Delete();
             });
-        }
-
-        private void MoveAllMovablesToCrate()
-        {
-            if (Map == null || Map == Map.Internal || !HasBounds) return;
-
-            TownHouseMovingCrate crate = GetOrCreateCrate();
-
-            TownHouseUtil.ForEachItemInBounds(Map, Rect, MinZ, MaxZ, delegate(Item item)
-            {
-                if (item == null || item.Deleted || item == this) return;
-                if (item is TownHouseHighlightTile || item is TownHouseMovingCrate) return;
-
-                bool isLocked = Lockdowns.Contains(item);
-                bool isSecure = false;
-                Container c = item as Container;
-                if (c != null) isSecure = Secures.Contains(c);
-
-                if (!item.Movable && !isLocked && !isSecure) return;
-
-                if (crate != null && !crate.Deleted)
-                    crate.DropItem(item);
-                else
-                    item.Delete();
-            });
-        }
-
-        private TownHouseMovingCrate GetOrCreateCrate()
-        {
-            TownHouseMovingCrate crate = null;
-            IPooledEnumerable e = GetItemsInRange(0);
-            try
-            {
-                foreach (Item item in e)
-                {
-                    TownHouseMovingCrate mc = item as TownHouseMovingCrate;
-                    if (mc != null && !mc.Deleted)
-                    {
-                        crate = mc;
-                        break;
-                    }
-                }
-            }
-            finally { e.Free(); }
-
-            if (crate == null)
-            {
-                crate = new TownHouseMovingCrate();
-                crate.MoveToWorld(Location, Map);
-            }
-
-            return crate;
         }
 
         // ----------------------------------------------------------------------
@@ -521,8 +727,9 @@ namespace Server.Custom.TownHouses
             }
 
             c.Movable = false;
+            c.IsSecure = true;
             Secures.Add(c);
-            m.SendMessage("Container secured.");
+            m.SendMessage("Container secured. Only friends and above may open it.");
             return true;
         }
 
@@ -530,12 +737,6 @@ namespace Server.Custom.TownHouses
         {
             if (m == null || item == null || item.Deleted) return false;
 
-            // STRICT ACCESS CHECK:
-            // - Owners and CoOwners can release anything.
-            // - Friends can only release items they personally locked down? 
-            //   (Current simplified logic: Friends cannot release at all to be safe, 
-            //   or you can track who locked it down. Standard UO: Friends cannot release.)
-            
             if (!IsCoOwner(m) && !IsOwner(m) && m.AccessLevel < AccessLevel.GameMaster)
             {
                 m.SendMessage("You must be at least a Co-Owner to release items.");
@@ -544,6 +745,7 @@ namespace Server.Custom.TownHouses
 
             if (Lockdowns.Remove(item)) {
                 item.Movable = true;
+                item.IsLockedDown = false;
                 m.SendMessage("Item released.");
                 return true;
             }
@@ -551,6 +753,7 @@ namespace Server.Custom.TownHouses
             Container c = item as Container;
             if (c != null && Secures.Remove(c)) {
                 c.Movable = true;
+                c.IsSecure = false;
                 m.SendMessage("Secure released.");
                 return true;
             }
@@ -566,7 +769,6 @@ namespace Server.Custom.TownHouses
         public bool TryAddFriend(Mobile from, Mobile target)
         {
             if (!IsOwner(from) && !IsCoOwner(from) && from.AccessLevel < AccessLevel.GameMaster) return false;
-            
             if (target == null || target.Deleted || !target.Player) return false;
             if (Friends.Contains(target) || IsOwner(target) || IsCoOwner(target)) return false;
             Friends.Add(target);
@@ -575,16 +777,13 @@ namespace Server.Custom.TownHouses
 
         public bool TryAddCoOwner(Mobile from, Mobile target)
         {
-            // STRICT CHECK: Only Owner can add CoOwners
-            if (!IsOwner(from) && from.AccessLevel < AccessLevel.GameMaster) 
+            if (!IsOwner(from) && from.AccessLevel < AccessLevel.GameMaster)
             {
                 from.SendMessage("Only the owner can add Co-Owners.");
                 return false;
             }
-
             if (target == null || target.Deleted || !target.Player) return false;
             if (CoOwners.Contains(target) || IsOwner(target)) return false;
-            
             CoOwners.Add(target);
             Friends.Remove(target);
             Bans.Remove(target);
@@ -594,15 +793,11 @@ namespace Server.Custom.TownHouses
         public bool TryBan(Mobile from, Mobile target)
         {
             if (!IsOwner(from) && !IsCoOwner(from) && from.AccessLevel < AccessLevel.GameMaster) return false;
-            
             if (target == null || target.Deleted || !target.Player) return false;
-            if (IsOwner(target)) return false; // Cannot ban owner
-            
+            if (IsOwner(target)) return false;
             if (!Bans.Contains(target)) Bans.Add(target);
-            
             Friends.Remove(target);
             CoOwners.Remove(target);
-            // Optionally eject them now
             return true;
         }
 
@@ -614,7 +809,6 @@ namespace Server.Custom.TownHouses
 
         public bool TryRemoveCoOwner(Mobile from, Mobile target)
         {
-            // STRICT CHECK: Only Owner can remove CoOwners
             if (!IsOwner(from) && from.AccessLevel < AccessLevel.GameMaster)
             {
                 from.SendMessage("Only the owner can remove Co-Owners.");
@@ -677,7 +871,7 @@ namespace Server.Custom.TownHouses
             OwnerSalePrice = price;
 
             from.SendMessage("This town house is now for sale.");
-            InvalidateProperties(); // Updates Tooltip!
+            InvalidateProperties();
             return true;
         }
 
@@ -690,7 +884,7 @@ namespace Server.Custom.TownHouses
             OwnerSalePrice = 0;
 
             from.SendMessage("Sale cancelled.");
-            InvalidateProperties(); // Updates Tooltip!
+            InvalidateProperties();
             return true;
         }
 
@@ -699,7 +893,7 @@ namespace Server.Custom.TownHouses
             if (from == null) return false;
             if (!IsOwner(from) && from.AccessLevel < AccessLevel.GameMaster) return false;
 
-            EvictOwner(); 
+            EvictOwner();
             from.SendMessage("You have abandoned the town house.");
             return true;
         }
@@ -734,7 +928,7 @@ namespace Server.Custom.TownHouses
 
             if (!GiveSaleProceeds(oldOwner, price))
             {
-                GiveSaleProceeds(buyer, price); // Refund
+                GiveSaleProceeds(buyer, price);
                 buyer.SendMessage("Sale failed: the seller could not receive payment.");
                 return false;
             }
@@ -750,11 +944,7 @@ namespace Server.Custom.TownHouses
             if (oldOwner != null && !oldOwner.Deleted)
                 oldOwner.SendMessage("Your town house has been sold for " + price.ToString("N0") + " gp.");
 
-            // FORCE REFRESH OF TOOLTIP
-            InvalidateProperties(); 
-            
-            // OPTIONAL: Resend gump if open, though usually the gump handles its own refresh.
-            // This ensures the sign Item visually updates for anyone looking at it.
+            InvalidateProperties();
             return true;
         }
 
@@ -822,10 +1012,14 @@ namespace Server.Custom.TownHouses
             gm.SendMessage("Highlight placed.");
         }
 
+        // ----------------------------------------------------------------------
+        // SERIALIZATION
+        // ----------------------------------------------------------------------
+
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);
-            writer.Write(2); // version
+            writer.Write(3); // version
 
             writer.Write(RegionName);
             writer.Write(RegionPriority);
@@ -838,9 +1032,6 @@ namespace Server.Custom.TownHouses
             writer.Write((int)WipePolicy);
 
             writer.Write(PurchasePrice);
-            // Legacy Rent fields for compatibility with older saves
-            writer.Write(0); // RentPrice
-            writer.Write(0); // RentDays
 
             writer.Write(Owner);
 
@@ -863,9 +1054,6 @@ namespace Server.Custom.TownHouses
 
             writer.Write(Secures.Count);
             for (int i = 0; i < Secures.Count; i++) writer.Write(Secures[i]);
-
-            // Legacy RentPaidUntil
-            writer.Write(DateTime.MinValue);
         }
 
         public override void Deserialize(GenericReader reader)
@@ -878,6 +1066,9 @@ namespace Server.Custom.TownHouses
                 RegionName = reader.ReadString();
                 RegionPriority = reader.ReadInt();
 
+                if (RegionPriority < 60)
+                    RegionPriority = 60;
+
                 Rect = reader.ReadRect2D();
                 MinZ = reader.ReadInt();
                 MaxZ = reader.ReadInt();
@@ -886,36 +1077,47 @@ namespace Server.Custom.TownHouses
                 WipePolicy = (TownHouseWipePolicy)reader.ReadInt();
 
                 PurchasePrice = reader.ReadInt();
-                int dummyRentPrice = reader.ReadInt();
-                int dummyRentDays = reader.ReadInt();
+
+                // Read and discard legacy rent fields from saves before version 3
+                if (version < 3)
+                {
+                    reader.ReadInt(); // RentPrice
+                    reader.ReadInt(); // RentDays
+                }
 
                 Owner = reader.ReadMobile();
 
                 int co = reader.ReadInt();
                 CoOwners = new List<Mobile>(co);
-                for (int i = 0; i < co; i++) {
+                for (int i = 0; i < co; i++)
+                {
                     Mobile m = reader.ReadMobile();
                     if (m != null) CoOwners.Add(m);
                 }
 
                 int fr = reader.ReadInt();
                 Friends = new List<Mobile>(fr);
-                for (int i = 0; i < fr; i++) {
+                for (int i = 0; i < fr; i++)
+                {
                     Mobile m = reader.ReadMobile();
                     if (m != null) Friends.Add(m);
                 }
 
                 int bn = reader.ReadInt();
                 Bans = new List<Mobile>(bn);
-                for (int i = 0; i < bn; i++) {
+                for (int i = 0; i < bn; i++)
+                {
                     Mobile m = reader.ReadMobile();
                     if (m != null) Bans.Add(m);
                 }
 
-                if (version >= 2) {
+                if (version >= 2)
+                {
                     OwnerSaleActive = reader.ReadBool();
                     OwnerSalePrice = reader.ReadInt();
-                } else {
+                }
+                else
+                {
                     OwnerSaleActive = false;
                     OwnerSalePrice = 0;
                 }
@@ -924,19 +1126,27 @@ namespace Server.Custom.TownHouses
 
                 int ld = reader.ReadInt();
                 Lockdowns = new List<Item>(ld);
-                for (int i = 0; i < ld; i++) {
+                for (int i = 0; i < ld; i++)
+                {
                     Item item = reader.ReadItem();
                     if (item != null) Lockdowns.Add(item);
                 }
 
                 int sc = reader.ReadInt();
                 Secures = new List<Container>(sc);
-                for (int i = 0; i < sc; i++) {
+                for (int i = 0; i < sc; i++)
+                {
                     Container c = reader.ReadItem() as Container;
-                    if (c != null) Secures.Add(c);
+                    if (c != null)
+                    {
+                        Secures.Add(c);
+                        c.IsSecure = true;
+                    }
                 }
 
-                DateTime dummyRentDate = reader.ReadDateTime();
+                // Read and discard legacy RentPaidUntil from saves before version 3
+                if (version < 3)
+                    reader.ReadDateTime();
             }
             else
             {
@@ -962,31 +1172,6 @@ namespace Server.Custom.TownHouses
 
             TownHouseSystem.Register(this);
             EnsureRegion();
-        }
-    }
-
-    public class TownHouseMovingCrate : WoodenBox
-    {
-        [Constructable]
-        public TownHouseMovingCrate()
-        {
-            Name = "town house moving crate";
-            Hue = 1109;
-            Movable = false;
-        }
-
-        public TownHouseMovingCrate(Serial serial) : base(serial) { }
-
-        public override void Serialize(GenericWriter writer)
-        {
-            base.Serialize(writer);
-            writer.Write(0);
-        }
-
-        public override void Deserialize(GenericReader reader)
-        {
-            base.Deserialize(reader);
-            reader.ReadInt();
         }
     }
 }

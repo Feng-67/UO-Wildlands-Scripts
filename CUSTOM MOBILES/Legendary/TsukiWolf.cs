@@ -86,7 +86,7 @@ namespace Server.Mobiles
             base.OnBeforeSpawn(location, map);
 
             // 10% chance Legendary version spawns from killing regular Tsuki Wolves
-            if (Utility.RandomDouble() < 0.05)
+            if (Utility.RandomDouble() < 0.10)
             {
                 ConvertToLegendary();
             }

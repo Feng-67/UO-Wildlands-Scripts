@@ -20,7 +20,7 @@ namespace Server.Mobiles
             this.BaseSoundID = 268;
 
             this.SetStr(400);
-            this.SetDex(70);
+            this.SetDex(200);
             this.SetInt(70);
 
             this.SetHits(400);
@@ -41,7 +41,13 @@ namespace Server.Mobiles
 
             this.VirtualArmor = 34;
             this.ControlSlots = 2;
-	    this.IsBonded = true;
+            this.IsBonded = true;
+        }
+
+        public override bool OnBeforeDeath()
+        {
+            this.IsBonded = false;
+            return base.OnBeforeDeath();
         }
 
         public SummonedEarthElemental(Serial serial)

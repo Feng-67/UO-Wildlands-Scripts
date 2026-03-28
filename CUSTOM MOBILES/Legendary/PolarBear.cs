@@ -60,10 +60,31 @@ namespace Server.Mobiles
         {
             base.OnBeforeSpawn(location, map);
 
-            if (Utility.RandomDouble() < 0.05)
+            if (map == Map.Tokuno && IsInWinterSpur(location.X, location.Y))
             {
-                ConvertToLegendary();
+                if (Utility.RandomDouble() < 0.10)
+                {
+                    ConvertToLegendary();
+                }
             }
+        }
+
+        private bool IsInWinterSpur(int x, int y)
+        {
+            // Define Triangle Vertices: A(846, 139), B(1002, 146), C(905, 34)
+            float d1 = GetSide(x, y, 846, 139, 1002, 146);
+            float d2 = GetSide(x, y, 1002, 146, 905, 34);
+            float d3 = GetSide(x, y, 905, 34, 846, 139);
+
+            bool has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+            bool has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+            return !(has_neg && has_pos);
+        }
+
+        private float GetSide(int px, int py, int x1, int y1, int x2, int y2)
+        {
+            return (px - x2) * (y1 - y2) - (x1 - x2) * (py - y2);
         }
 
         public void ConvertToLegendary()

@@ -40,6 +40,12 @@ namespace Server.Items
 
                     // Sand
                     typeof(Sand)
+
+                    // Armor Refinements
+                    typeof(MalleableAlloy),
+                    typeof(SolventFlask),
+                    typeof(RefinementComponent),
+                    typeof(RefinementItem)
                 };
             }
         }

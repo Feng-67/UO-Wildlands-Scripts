@@ -179,8 +179,31 @@ namespace Server.Custom.TownHouses
 
         public override bool OnMoveInto(Mobile m, Direction d, Point3D newLocation, Point3D oldLocation)
         {
-            if (Controller != null && Controller.IsBanned(m))
+            if (Controller == null)
+                return base.OnMoveInto(m, d, newLocation, oldLocation);
+
+            // Always allow staff
+            if (m.IsStaff())
+                return base.OnMoveInto(m, d, newLocation, oldLocation);
+
+            // If house is unowned, allow entry
+            if (Controller.Owner == null)
+                return base.OnMoveInto(m, d, newLocation, oldLocation);
+
+            // Block banned players
+            if (Controller.IsBanned(m))
                 return false;
+
+            // If house is public, allow entry (bans still apply above)
+            if (Controller.IsPublic)
+                return base.OnMoveInto(m, d, newLocation, oldLocation);
+
+            // Block anyone not on the access list
+            if (!Controller.IsFriend(m))
+            {
+                m.SendMessage("This is a private residence.");
+                return false;
+            }
 
             return base.OnMoveInto(m, d, newLocation, oldLocation);
         }
@@ -196,12 +219,12 @@ namespace Server.Custom.TownHouses
             if (from.AccessLevel >= AccessLevel.GameMaster)
                 return base.OnDoubleClick(from, o);
 
-            Container c = o as Container;
-            if (c != null && Controller.Secures.Contains(c))
+            Item secured = o as Item;
+            if (secured != null && Controller.Secures.Contains(secured))
             {
                 if (!Controller.IsFriend(from))
                 {
-                    from.SendMessage("That container is secured. You do not have access.");
+                    from.SendMessage("That is secured. You do not have access.");
                     return false;
                 }
             }
@@ -334,7 +357,10 @@ namespace Server.Custom.TownHouses
         // Locks & secures
         public int LockdownLimit { get; private set; }
         public List<Item> Lockdowns { get; private set; }
-        public List<Container> Secures { get; private set; }
+        public List<Item> Secures { get; private set; }
+
+        // Public / Private access mode
+        public bool IsPublic { get; private set; }
 
         // Region instance
         private TownHouseRegion m_Region;
@@ -367,10 +393,11 @@ namespace Server.Custom.TownHouses
 
             LockdownLimit = 1500;
             Lockdowns = new List<Item>();
-            Secures = new List<Container>();
+            Secures = new List<Item>();
 
             OwnerSaleActive = false;
             OwnerSalePrice = 0;
+            IsPublic = false;
             TownHouseSystem.Register(this);
         }
 
@@ -438,7 +465,7 @@ namespace Server.Custom.TownHouses
                 }
                 else
                 {
-                    list.Add(1060659, "Status\tPrivate Residence");
+                    list.Add(1060659, string.Format("Status\t{0}", IsPublic ? "Public Residence" : "Private Residence"));
                 }
             }
         }
@@ -562,6 +589,19 @@ namespace Server.Custom.TownHouses
             InvalidateProperties();
         }
 
+        public void TogglePublic(Mobile from)
+        {
+            if (!IsOwner(from) && from.AccessLevel < AccessLevel.GameMaster)
+            {
+                from.SendMessage("Only the owner can change the house access mode.");
+                return;
+            }
+
+            IsPublic = !IsPublic;
+            from.SendMessage("This house is now {0}.", IsPublic ? "open to the public" : "private");
+            InvalidateProperties();
+        }
+
         // ----------------------------------------------------------------------
         // TRANSACTIONS
         // ----------------------------------------------------------------------
@@ -642,10 +682,10 @@ namespace Server.Custom.TownHouses
 
             Lockdowns.Clear();
 
-            foreach (Container c in Secures)
+            foreach (Item item in Secures)
             {
-                if (c != null && !c.Deleted)
-                    c.IsSecure = false;
+                if (item != null && !item.Deleted)
+                    item.IsSecure = false;
             }
 
             Secures.Clear();
@@ -707,11 +747,11 @@ namespace Server.Custom.TownHouses
             return true;
         }
 
-        public bool TrySecure(Mobile m, Container c)
+        public bool TrySecure(Mobile m, Item item)
         {
-            if (m == null || c == null || c.Deleted) return false;
+            if (m == null || item == null || item.Deleted) return false;
 
-            if (!IsInside(c.Location, c.Map)) {
+            if (!IsInside(item.Location, item.Map)) {
                 m.SendMessage("That is not inside this town house.");
                 return false;
             }
@@ -721,15 +761,15 @@ namespace Server.Custom.TownHouses
                 return false;
             }
 
-            if (Secures.Contains(c)) {
+            if (Secures.Contains(item)) {
                 m.SendMessage("That is already secured.");
                 return false;
             }
 
-            c.Movable = false;
-            c.IsSecure = true;
-            Secures.Add(c);
-            m.SendMessage("Container secured. Only friends and above may open it.");
+            item.Movable = false;
+            item.IsSecure = true;
+            Secures.Add(item);
+            m.SendMessage("Item secured. Only friends and above may open it.");
             return true;
         }
 
@@ -750,10 +790,9 @@ namespace Server.Custom.TownHouses
                 return true;
             }
 
-            Container c = item as Container;
-            if (c != null && Secures.Remove(c)) {
-                c.Movable = true;
-                c.IsSecure = false;
+            if (Secures.Remove(item)) {
+                item.Movable = true;
+                item.IsSecure = false;
                 m.SendMessage("Secure released.");
                 return true;
             }
@@ -1019,7 +1058,7 @@ namespace Server.Custom.TownHouses
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);
-            writer.Write(3); // version
+            writer.Write(4); // version
 
             writer.Write(RegionName);
             writer.Write(RegionPriority);
@@ -1054,6 +1093,8 @@ namespace Server.Custom.TownHouses
 
             writer.Write(Secures.Count);
             for (int i = 0; i < Secures.Count; i++) writer.Write(Secures[i]);
+
+            writer.Write(IsPublic);
         }
 
         public override void Deserialize(GenericReader reader)
@@ -1133,20 +1174,22 @@ namespace Server.Custom.TownHouses
                 }
 
                 int sc = reader.ReadInt();
-                Secures = new List<Container>(sc);
+                Secures = new List<Item>(sc);
                 for (int i = 0; i < sc; i++)
                 {
-                    Container c = reader.ReadItem() as Container;
-                    if (c != null)
+                    Item si = reader.ReadItem();
+                    if (si != null)
                     {
-                        Secures.Add(c);
-                        c.IsSecure = true;
+                        Secures.Add(si);
+                        si.IsSecure = true;
                     }
                 }
 
                 // Read and discard legacy RentPaidUntil from saves before version 3
                 if (version < 3)
                     reader.ReadDateTime();
+
+                IsPublic = (version >= 4) ? reader.ReadBool() : false;
             }
             else
             {
@@ -1165,7 +1208,7 @@ namespace Server.Custom.TownHouses
                 Bans = new List<Mobile>();
                 LockdownLimit = 125;
                 Lockdowns = new List<Item>();
-                Secures = new List<Container>();
+                Secures = new List<Item>();
                 OwnerSaleActive = false;
                 OwnerSalePrice = 0;
             }

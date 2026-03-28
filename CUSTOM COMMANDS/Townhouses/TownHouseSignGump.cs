@@ -50,6 +50,7 @@ namespace Server.Custom.TownHouses
         private const int BTN_AddTarget = 12;
         private const int BTN_ListNext = 13;
         private const int BTN_ListPrev = 14;
+        private const int BTN_TogglePublic = 15;
 
         private const int BTN_REMOVE_BASE = 1000;
 
@@ -171,6 +172,10 @@ namespace Server.Custom.TownHouses
 
                     AddButton(30, y, 4005, 4007, BTN_Abandon, GumpButtonType.Reply, 0);
                     AddLabel(65, y, LabelHue, "Abandon House");
+                    y += 25;
+
+                    AddButton(30, y, 4005, 4007, BTN_TogglePublic, GumpButtonType.Reply, 0);
+                    AddLabel(65, y, LabelHue, m_C.IsPublic ? "Access: Public (click to make Private)" : "Access: Private (click to make Public)");
                     y += 35;
                 }
             }
@@ -191,7 +196,7 @@ namespace Server.Custom.TownHouses
             }
 
             // FIXED: Visible to Co-Owners (includes Owner)
-            if (m_C.IsCoOwner(m_From) || m_From.AccessLevel >= AccessLevel.GameMaster)
+            if (m_C.IsOwner(m_From) || m_C.IsCoOwner(m_From) || m_From.AccessLevel >= AccessLevel.GameMaster)
             {
                 AddLabel(30, y, HeaderHue, "ACCESS LISTS");
                 y += 25;
@@ -271,8 +276,7 @@ namespace Server.Custom.TownHouses
             AddLabel(30, 90, HeaderHue, title);
             AddImageTiled(30, 110, 250, 2, 96);
 
-            // FIXED: Only Owner can edit Co-Owners list; Co-Owners can edit others
-            bool canEditList = (m_Page == PAGE_COOWNERS) ? m_C.IsOwner(m_From) : m_C.IsCoOwner(m_From);
+            bool canEditList = (m_Page == PAGE_COOWNERS) ? m_C.IsOwner(m_From) : (m_C.IsOwner(m_From) || m_C.IsCoOwner(m_From));
             if (canEditList || m_From.AccessLevel >= AccessLevel.GameMaster)
             {
                 AddButton(30, 120, 4005, 4007, BTN_AddTarget, GumpButtonType.Reply, 0);
@@ -397,9 +401,9 @@ namespace Server.Custom.TownHouses
                     break;
 
                 case BTN_AddTarget:
-                    // FIXED: Apply same refinement to button logic
-                    bool canEdit = (m_Page == PAGE_COOWNERS) ? m_C.IsOwner(m_From) : m_C.IsCoOwner(m_From);
-                    if (canEdit || m_From.AccessLevel >= AccessLevel.GameMaster) {
+                    bool canEdit = (m_Page == PAGE_COOWNERS) ? m_C.IsOwner(m_From) : (m_C.IsOwner(m_From) || m_C.IsCoOwner(m_From));
+                    if (canEdit || m_From.AccessLevel >= AccessLevel.GameMaster)
+                    {
                         m_From.SendMessage("Target the player.");
                         m_From.Target = new AddListTarget(m_C, m_Page);
                         return;
@@ -412,6 +416,7 @@ namespace Server.Custom.TownHouses
                 case BTN_GM_ToggleWipe: m_C.ToggleWipePolicy(); break;
                 case BTN_GM_Evict: m_C.EvictOwner(); break;
                 case BTN_GM_ApplySettings: ApplyGMSettings(info); break;
+                case BTN_TogglePublic: m_C.TogglePublic(m_From); break;
             }
 
             if (bid >= BTN_REMOVE_BASE)
@@ -465,7 +470,10 @@ namespace Server.Custom.TownHouses
             private readonly TownHouseController m_C;
             public SecureTarget(TownHouseController c) : base(30, false, TargetFlags.None) { m_C = c; }
             protected override void OnTarget(Mobile from, object targeted) {
-                if (m_C != null && targeted is Container) m_C.TrySecure(from, (Container)targeted);
+                if (m_C != null && targeted is Item)
+                    m_C.TrySecure(from, (Item)targeted);
+                else
+                    from.SendMessage("That cannot be secured.");
                 Refresh(from, m_C);
             }
         }

@@ -60,12 +60,18 @@ namespace Server.Mobiles
 
             VirtualArmor = 58;
             ControlSlots = 3; // Kept at 3 slots
-	    this.IsBonded = true;
+	        this.IsBonded = true;
 
             m_DispelDifficulty = 91 + (int)((baseskill * 83) / 5.2);
 
             SetWeaponAbility(WeaponAbility.ArmorIgnore);
             SetWeaponAbility(WeaponAbility.CrushingBlow);
+        }
+
+        public override bool OnBeforeDeath()
+        {
+            this.IsBonded = false;
+            return base.OnBeforeDeath();
         }
 
         // REMOVED: GetFightModeRanking method. 

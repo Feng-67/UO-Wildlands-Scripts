@@ -43,9 +43,14 @@ namespace Server.Mobiles
 
             this.VirtualArmor = 40;
             this.ControlSlots = 2;
-	    this.IsBonded = true;
-
             this.AddItem(new LightSource());
+            this.IsBonded = true;
+        }
+
+        public override bool OnBeforeDeath()
+        {
+            this.IsBonded = false;
+            return base.OnBeforeDeath();
         }
 
         public SummonedFireElemental(Serial serial)

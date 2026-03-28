@@ -1,9 +1,3 @@
-/*
- * UO Wildlands Custom Script
- * Derived from ServUO Core
- * Compiled & Modified by: [Feng / UO Wildlands Team]
- * * Licensed under the GNU General Public License v3.0 (GPL-3.0)
- */
 using System;
 using System.Collections.Generic;
 using Server;
@@ -69,7 +63,7 @@ namespace Server.Items
                     if (c.Owner == from && c.Map == from.Map && !c.Deleted)
                     {
                         foundCorpse = c;
-                        break; 
+                        break;
                     }
                 }
             }
@@ -78,12 +72,28 @@ namespace Server.Items
             {
                 // NEW: Logic to grab equipped items (armor/clothing) as well as bag items
                 List<Item> itemsToMove = new List<Item>(foundCorpse.Items);
-                
+
                 // Also check for items "worn" by the corpse that aren't in the main list
                 foreach (Item equipped in foundCorpse.EquipItems)
                 {
                     if (equipped != null && !equipped.Deleted)
                         itemsToMove.Add(equipped);
+                }
+
+                // Destroy all gold on the corpse
+                List<Item> goldToDelete = new List<Item>();
+                foreach (Item item in itemsToMove)
+                {
+                    if (item is Gold)
+                    {
+                        goldToDelete.Add(item);
+                    }
+                }
+
+                foreach (Item gold in goldToDelete)
+                {
+                    itemsToMove.Remove(gold);
+                    gold.Delete();
                 }
 
                 if (itemsToMove.Count > 0)
@@ -94,6 +104,7 @@ namespace Server.Items
                     }
 
                     from.SendMessage("The staff glows brightly, pulling all your gear through the ether!");
+                    from.SendMessage("The gold you carried was destroyed!");
                     from.PlaySound(0x1F2); // Play a 'summoning' sound effect
                     from.FixedParticles(0x3709, 10, 30, 5052, EffectLayer.LeftFoot); // Add a visual sparkle
 

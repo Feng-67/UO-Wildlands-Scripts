@@ -42,6 +42,13 @@ namespace Server.Items
                     typeof(MilkChocolate), typeof(WhiteChocolate), typeof(SweetCocoaButter),
                     typeof(DarkTruffle), typeof(FreshGinger),
 
+                    // Standard and High Seas Fish
+                    typeof(Fish),
+                    typeof(BaseHighseasFish), 
+
+                    // Crabs and Lobsters
+                    typeof(BaseCrabAndLobster),
+
                     // High Seas Fish Steaks
                     typeof(AutumnDragonfishSteak), typeof(BullFishSteak), typeof(CrystalFishSteak),
                     typeof(FairySalmonSteak), typeof(FireFishSteak), typeof(GiantKoiSteak),

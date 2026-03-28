@@ -20,7 +20,7 @@ namespace Server.Mobiles
             this.BaseSoundID = 278;
 
             this.SetStr(400);
-            this.SetDex(70);
+            this.SetDex(200);
             this.SetInt(100);
 
             this.SetHits(400);
@@ -46,13 +46,20 @@ namespace Server.Mobiles
             this.VirtualArmor = 40;
             this.ControlSlots = 2;
             this.CanSwim = true;
+            this.IsBonded = true;
+        }
+
+        public override bool OnBeforeDeath()
+        {
+            this.IsBonded = false;
+            return base.OnBeforeDeath();
         }
 
         public SummonedWaterElemental(Serial serial)
             : base(serial)
         {
         }
-
+                
         public override double DispelDifficulty
         {
             get

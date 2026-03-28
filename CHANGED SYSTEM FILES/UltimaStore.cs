@@ -116,9 +116,9 @@ namespace Server.Engines.UOStore
             Register<TransmogPotion>(1159501, 1159501, 0x0EFF, 0, 1150, 100, cat);
             Register<PetBondingPotion>(1152921, 1156678, 0, 0x9CBC, 0, 175, cat);
             Register<ElixirOfRebirth>(1112762, 1112762, 0x24E2, 0x48E, 1112762, 10, cat);
+            Register<PetLeash>("Pet Leash", 0, 0x1374, 1153, 1153, 200, cat);
             Register(typeof(ScrollOfDecurse), "Scroll of Decurse", 0, 0xA1E4, 1266, 0, 500, cat);
             Register(typeof(ScrollOfAntiqueToPrized), "Scroll of Antique to Prized", 0, 0xA1E4, 1638, 0, 750, cat);
-            Register<PetLeash>("Pet Leash", 0, 0x1374, 1153, 1153, 200, cat);
 
             Register<FullMagerySpellbook>("Magery Spellbook", 0, 0xEFA, 0, 0, 10, cat);
             Register<FullNecroSpellbook>("Necromany Spellbook", 0, 0x2253, 0, 0, 10, cat);
@@ -128,6 +128,7 @@ namespace Server.Engines.UOStore
             Register<RunicAtlasExceptional>("Runic Atlas", 0, 0x9C16, 0, 0, 20, cat);
             Register<SpellweavingBookFull>("Spellweaving Spellbook", 0, 0x2D50, 0, 0, 40, cat);
             Register<PowerScrollBook>("Power Scroll Book", 1155684, 0x9A95, 1153, 1153, 500, cat);
+            Register<MarkRuneStone>("Mark Rune", 0, 0x1F14, 0x481, 0, 100, cat);
 
             Register<ReagentStorageChest>("Reagent Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<ScrollStorageChest>("Scroll Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
@@ -138,6 +139,7 @@ namespace Server.Engines.UOStore
             Register<MondainStorageChest>("Mondain's Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<StygianAbyssStorageChest>("Stygian Abyss Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<HighSeasStorageChest>("High Seas Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
+            Register<DyeStorageChest>("Dye Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
 
             Register<DavyJonesPoker>("Davy Jones' Iron Poker", 1041088, 0xF62, 2122, 1315, 50, cat);
             Register<BreakParalysisPotion>("Break Paralysis Potion", 0, 0xF09, 2543, 0, 5, cat);
@@ -152,9 +154,9 @@ namespace Server.Engines.UOStore
             Register<TrashBarrelPortable>("Portable Trash Barrel", 0, 0xE77, 0x386, 0, 25, cat);
             Register<HooksShield>("Hook's Shield", 0, 0xA64A, 0, 0, 1000, cat);
             Register<ChampionMonolith>("Champion Monolith", 0, 41066, 0, 0, 1000, cat);
+            Register<VaseOfVirtue>("Vase of Virtue", 0, 0xB189, 0, 0, 1000, cat);
             Register<LockpickingChest>("Lockpicking Chest", 0, 0x9AA, 0, 0, 50, cat);
-
-            // Category: Vesper Museum Collection
+                        
             Register<GypsyHeaddress>("Gypsy Headdress", 1073254, 0x1544, 0x453, 0x453, 250, cat);
             Register<NystulsWizardsHat>("Nystul's Wizard Hat", 1073255, 0x1718, 0x453, 0x453, 250, cat);
             Register<JesterHatOfChuckles>("Jester Hat of Chuckles", 1073256, 0x171C, 0x453, 0x453, 250, cat);
@@ -172,9 +174,7 @@ namespace Server.Engines.UOStore
             Register<BardDragonElementalSlayer>("Dragon Elemental Slayer", 0, 0x0EB3, 0x851, 0, 250, cat);
             Register<BardRepondFeySlayer>("Repond Fey Slayer", 0, 0x0EB3, 0x978, 0, 250, cat);
             Register<BardUndeadDemonSlayer>("Undead Demon Slayer", 0, 0x0EB3, 0x59D, 0, 250, cat);
-
-            // Register<RoseOfTrinsic>(1062913, 1156960, 0x234D, 0, 0, 100, cat);
-            // The Stat Rose Collection
+                        
             Register<RoseOfStrength>("Rose of Strength", 1156960, 0x0EB0, 0, 1645, 100, cat);
             Register<RoseOfIntelligence>("Rose of Intelligence", 1156960, 0x0EB0, 0, 2498, 100, cat);
             Register<RoseOfDexterity>("Rose of Dexterity", 1156960, 0x0EB0, 0, 33, 100, cat);
@@ -186,6 +186,7 @@ namespace Server.Engines.UOStore
             Register<CommodityDeedBox>(1080523, 0, 0x9AA, 0, 0x4AB, 500, cat);
             Register<CrystalPortal>(1113945, 0, 0x468B, 0, 0, 1500, cat);
             Register<CorruptedCrystalPortal>(1150074, 0, 0x468B, 0, 0, 1500, cat);
+
             Register<WeaponEngravingTool>(1076158, 0, 0x1028, 0, 0, 750, cat);
             Register<EtherealRetouchingTool>(1113814, 0, 0x1028, 0, 0x481, 750, cat);
             Register<PetBrandingIron>(1157314, 1157372, 0, 0x9CC3, 0, 600, cat);
@@ -201,6 +202,7 @@ namespace Server.Engines.UOStore
             Register<QuiverOfInfinity>(1075201, 1156971, 0x2B02, 0, 0, 100, cat);
             Register<CuSidheFormTalisman>(new TextDefinition[] { 1157010, 1031670 }, 1156970, 0x2F59, 0, 0, 100, cat);
             Register<FerretFormTalisman>(new TextDefinition[] { 1157010, 1031672 }, 1156969, 0x2F59, 0, 0, 100, cat);
+
             Register<LeggingsOfEmbers>(1062911, 1156956, 0x1411, 0, 0x2C, 100, cat);
             Register<ShaminoCrossbow>(1062915, 1156957, 0x26C3, 0, 0x504, 100, cat);
             Register<SamuraiHelm>(1062923, 1156959, 0x236C, 0, 0, 100, cat);
@@ -213,13 +215,10 @@ namespace Server.Engines.UOStore
             Register<MerchantsTrinket>(new TextDefinition[] { 1156828, 1156682 }, 1156667, 0, 0x9C67, 0, 500, cat, ConstructMerchantsTrinket);
             Register<ArmorEngravingToolToken>(1080547, 1156652, 0, 0x9C65, 0, 200, cat);
             Register<BagOfBulkOrderCovers>(1071116, 1156654, 0, 0x9CC6, 0, 200, cat, ConstructBOBCoverTwo);
-
-            // Human/Elf Set
+                        
             Register<StoreValoriteCloak>("Valorite Cloak", 1041296, 0x1515, 2210, 2210, 250, cat);
             Register<StoreValoriteRobe>("Valorite Robe", 1041297, 0x1F03, 2210, 2210, 250, cat);
             Register<StoreValoriteDress>("Valorite Dress", 1080371, 0x1F01, 2210, 2210, 250, cat);
-
-            // Gargoyle Set
             Register<StoreGargishValoriteRobe>("Gargish Valorite Robe", 1113885, 0x46AA, 2210, 2210, 250, cat);
             Register<StoreGargishValoriteFancyRobe>("Gargish Valorite Fancy Robe", 1113884, 0x46AB, 2210, 2210, 250, cat);
 
@@ -235,10 +234,8 @@ namespace Server.Engines.UOStore
             Register<HoodedBritanniaRobe>(1125155, 1158016, 0xA0AD, 0, 0, 1500, cat, ConstructRobe);
             Register<HoodedBritanniaRobe>(1125155, 1158016, 0xA0AE, 0, 0, 1500, cat, ConstructRobe);
             Register<HoodedBritanniaRobe>(1125155, 1158016, 0xA0AF, 0, 0, 1500, cat, ConstructRobe);
-
-            //TODO: UndeadWeddingBundle, TotemOfChromaticFortune, 
-
                       
+                                 
             // decorations
             cat = StoreCategory.Decorations;
 
@@ -256,6 +253,7 @@ namespace Server.Engines.UOStore
             Register<DecorativeKitchenSet>(1158970, 1158971, 0, 0x9CE8, 0, 1200, cat);
             Register<SquirrelMailbox>(1158859, 1158857, 0xA207, 0, 0, 400, cat);
             Register<BarrelMailbox>(1158859, 1158857, 0xA1F7, 0, 0, 400, cat);
+
             Register<DecorativeBlackwidowDeed>(1157897, 1157898, 0, 0x9CD7, 0, 600, cat);
             Register<HildebrandtDragonRugDeed>(1157889, 1157890, 0, 0x9CD8, 0, 700, cat);
             Register<SmallWorldTreeRugAddonDeed>(1157206, 1157898, 0, 0x9CBA, 0, 300, cat);
@@ -328,26 +326,26 @@ namespace Server.Engines.UOStore
             Register<SnowTreeDeed>(1071103, 1156656, 0, 0x9C8A, 0, 200, cat);
             Register<MapleTreeDeed>(1071104, 1156657, 0, 0x9C87, 0, 200, cat);
 
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1157015 }, 1156916, 0, 0x9CB5, 0, 200, cat, ConstructMiniHouseDeed); // two story wood & plaster
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011317 }, 1156916, 0x22F5, 0, 0, 200, cat, ConstructMiniHouseDeed); // small stone tower
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011307 }, 1156916, 0x22E0, 0, 0, 200, cat, ConstructMiniHouseDeed); // wood and plaster house
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011308 }, 1156916, 0x22E1, 0, 0, 200, cat, ConstructMiniHouseDeed); // thathed-roof cottage
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011312 }, 1156916, 0, 0x9CB2, 0, 200, cat, ConstructMiniHouseDeed); // Tower
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011313 }, 1156916, 0, 0x9CB1, 0, 200, cat, ConstructMiniHouseDeed); // Small stone keep
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011314 }, 1156916, 0, 0x9CB0, 0, 200, cat, ConstructMiniHouseDeed); // Castle
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011320 }, 1156916, 0x22F3, 0, 0, 200, cat, ConstructMiniHouseDeed); // sanstone house with patio
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011316 }, 1156916, 0, 0x9CB3, 0, 200, cat, ConstructMiniHouseDeed); // marble house with patio
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011319 }, 1156916, 0x2300, 0, 0, 200, cat, ConstructMiniHouseDeed); // two story villa
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1157014 }, 1156916, 0, 0x9CB6, 0, 200, cat, ConstructMiniHouseDeed); // two story stone & plaster
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011315 }, 1156916, 0, 0x9CB4, 0, 200, cat, ConstructMiniHouseDeed); // Large house with patio
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011309 }, 1156916, 0, 0x9CB7, 0, 200, cat, ConstructMiniHouseDeed); // brick house
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011304 }, 1156916, 0x22C9, 0, 0, 200, cat, ConstructMiniHouseDeed); // field stone house
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011306 }, 1156916, 0x22DF, 0, 0, 200, cat, ConstructMiniHouseDeed); // wooden house
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011305 }, 1156916, 0x22DE, 0, 0, 200, cat, ConstructMiniHouseDeed); // small brick house
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011303 }, 1156916, 0x22E1, 0, 0, 200, cat, ConstructMiniHouseDeed); // stone and plaster house
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011318 }, 1156916, 0x22FB, 0, 0, 200, cat, ConstructMiniHouseDeed); // two-story log cabin
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011321 }, 1156916, 0x22F6, 0, 0, 200, cat, ConstructMiniHouseDeed); // small stone workshop
-            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011322 }, 1156916, 0x22F4, 0, 0, 200, cat, ConstructMiniHouseDeed); // small marble workshop
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1157015 }, 1156916, 0, 0x9CB5, 0, 50, cat, ConstructMiniHouseDeed); // two story wood & plaster
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011317 }, 1156916, 0x22F5, 0, 0, 50, cat, ConstructMiniHouseDeed); // small stone tower
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011307 }, 1156916, 0x22E0, 0, 0, 50, cat, ConstructMiniHouseDeed); // wood and plaster house
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011308 }, 1156916, 0x22E1, 0, 0, 50, cat, ConstructMiniHouseDeed); // thathed-roof cottage
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011312 }, 1156916, 0, 0x9CB2, 0, 50, cat, ConstructMiniHouseDeed); // Tower
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011313 }, 1156916, 0, 0x9CB1, 0, 50, cat, ConstructMiniHouseDeed); // Small stone keep
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011314 }, 1156916, 0, 0x9CB0, 0, 50, cat, ConstructMiniHouseDeed); // Castle
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011320 }, 1156916, 0x22F3, 0, 0, 50, cat, ConstructMiniHouseDeed); // sanstone house with patio
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011316 }, 1156916, 0, 0x9CB3, 0, 50, cat, ConstructMiniHouseDeed); // marble house with patio
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011319 }, 1156916, 0x2300, 0, 0, 50, cat, ConstructMiniHouseDeed); // two story villa
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1157014 }, 1156916, 0, 0x9CB6, 0, 50, cat, ConstructMiniHouseDeed); // two story stone & plaster
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011315 }, 1156916, 0, 0x9CB4, 0, 50, cat, ConstructMiniHouseDeed); // Large house with patio
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011309 }, 1156916, 0, 0x9CB7, 0, 50, cat, ConstructMiniHouseDeed); // brick house
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011304 }, 1156916, 0x22C9, 0, 0, 50, cat, ConstructMiniHouseDeed); // field stone house
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011306 }, 1156916, 0x22DF, 0, 0, 50, cat, ConstructMiniHouseDeed); // wooden house
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011305 }, 1156916, 0x22DE, 0, 0, 50, cat, ConstructMiniHouseDeed); // small brick house
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011303 }, 1156916, 0x22E1, 0, 0, 50, cat, ConstructMiniHouseDeed); // stone and plaster house
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011318 }, 1156916, 0x22FB, 0, 0, 50, cat, ConstructMiniHouseDeed); // two-story log cabin
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011321 }, 1156916, 0x22F6, 0, 0, 50, cat, ConstructMiniHouseDeed); // small stone workshop
+            Register<MiniHouseDeed>(new TextDefinition[] { 1062096, 1011322 }, 1156916, 0x22F4, 0, 0, 50, cat, ConstructMiniHouseDeed); // small marble workshop
 
             // mounts
             cat = StoreCategory.Mounts;
@@ -366,32 +364,19 @@ namespace Server.Engines.UOStore
             Register<EtherealCuSidhe>(1080386, 0, 0x2D96, 0, 0, 200, cat);
             Register<EtherealReptalon>(1113908, 0, 0x2D95, 0, 0, 200, cat);
             Register<EtherealHiryu>(1113813, 0, 0x276A, 0, 0, 200, cat);
-            Register<EtherealBoura>(1150006, 0, 0x4289, 0, 0, 200, cat);
             Register<EtherealTiger>(1154589, 0, 0x9844, 0, 0, 200, cat);
             Register<EtherealSerpentineDragon>(1157995, 0, 0xA010, 0, 0, 200, cat);
-            //Register<CoconutCrabStatue>(1159165, 1159166, 0xA335, 0, 0, 200, cat);
+            Register<EtherealWarBoar>(1159423, 0, 0xA554, 0, 0, 200, cat);
+            Register<EtherealAncientHellHound>(1155723, 0, 0x3FFD, 0, 0, 200, cat);
             //Register<SkeletalCatStatue>(1158462, 1158738, 0xA138, 0, 0, 200, cat);
             //Register<EowmuStatue>(1158082, 1158433, 0xA0C0, 0, 0, 1000, cat);
             //Register<WindrunnerStatue>(1124685, 1157373, 0x9ED5, 0, 0, 1000, cat);
-            //Register<LasherStatue>(1157214, 1157305, 0x9E35, 0, 0, 1000, cat);
-            //Register<ChargerOfTheFallen>(1075187, 1156646, 0x2D9C, 0, 0, 1000, cat);
-
-            // Alaskan Malamute
+            
             Register<AlaskanMalamuteStatue>("Alaskan Malmute", 0, 0xA76C, 0, 0, 20000, cat);
-
-            // Great Dane (Includes Hue 1117)
             Register<GreatDaneStatue>("Great Dane", 0, 0xA76D, 1117, 0, 20000, cat);
-
-            // Newfoundland
             Register<NewfoundlandStatue>("Newfoundland", 0, 0xA76B, 0, 0, 20000, cat);
-
-            // Rottweiler
             Register<RottweilerStatue>("Rottweiler", 0, 0xA770, 0, 0, 20000, cat);
-
-            // Russian Terrier
             Register<RussianTerrierStatue>("Russian Terrier", 0, 0xA76F, 0, 0, 20000, cat);
-
-            // Saint Bernard
             Register<SaintBernardStatue>("Saint Bernard", 0, 0xA76E, 0, 0, 20000, cat);
 
 
@@ -405,16 +390,7 @@ namespace Server.Engines.UOStore
             Register<SpecialDyeTub>(1006047, 0, 0xFAB, 0, 0, 250, cat);
             Register<LeatherDyeTub>(1006052, 0, 0xFAB, 0, 0, 500, cat);
             Register<RunebookDyeTub>(1049740, 0, 0xFAB, 0, 0, 500, cat);
-            //Register<StatuetteDyeTub>(1049741, 0, 0xFAB, 0, 0, 500, cat);
-
-            // New All-Dye Tubs with corrected Tooltip
-            Register<AllDyeTubsRecallRune>("Dye Tub [Recall Rune]", 1024009, 0xFAB, 0, 0, 50, cat);
-            Register<AllDyeTubsSkin>("Dye Tub [Skin]", 1024009, 0xFAB, 0, 0, 50, cat);
-           
-            Register<AllDyeTubsArmor>("Dye Tub [Armor]", 1024009, 0xFAB, 0, 0, 100, cat);
-            Register<AllDyeTubsWeapon>("Dye Tub [Weapon]", 1024009, 0xFAB, 0, 0, 100, cat);
-            Register<AllDyeTubsShield>("Dye Tub [Shield]", 1024009, 0xFAB, 0, 0, 100, cat);
-            Register<AllDyeTubsBookSpell>("Dye Tub [Spellbook]", 1024009, 0xFAB, 0, 0, 250, cat);
+            Register<SpellbookDyeTub>("Spellbook Dye Tub", 1024009, 0xFAB, 0, 0, 1000, cat);
 
             // Cub Store Dyes - 1000 SOV (5 uses each)
             Register<CubPhoenixRed>(1151651, 0, 0xEFF, 0, 1964, 1000, cat);
@@ -481,7 +457,7 @@ namespace Server.Engines.UOStore
             Register<PigmentsOfTokuno>(new TextDefinition[] { 1070933, 1070993 }, 1156906, 0, 0x9CAC, 0, 400, cat, ConstructPigments); // Berserker Red
             Register<PigmentsOfTokuno>(new TextDefinition[] { 1070933, 1079579 }, 1156906, 0, 0x9CAB, 0, 400, cat, ConstructPigments); // Faded Coal
             Register<PigmentsOfTokuno>(new TextDefinition[] { 1070933, 1070987 }, 1156906, 0, 0x9C9D, 0, 400, cat, ConstructPigments); // Paragon Gold
-                   
+                
                         
             Register<AbyssalHairDye>(1149822, 1156676, 0, 0x9C7A, 0, 400, cat);
             Register<SpecialHairDye>(new TextDefinition[] { 1071387, 1071439 }, 1156676, 0, 0x9C78, 0, 400, cat, ConstructHairDye); // Lemon Lime
@@ -500,13 +476,7 @@ namespace Server.Engines.UOStore
 
             // pet dyes
             cat = StoreCategory.PetDyes;
-
-            // The Cheap Sample
-            //Register<PetDyeSampleVividCrimson>("Vivid Crimson Sample", 1024009, 0xEFB, 1157, 0, 5, cat);
-
-            // The Premium Permanent Dye
-            //Register<PetDyeTubVividCrimson>("Vivid Crimson Pet Dye", 1024009, 0xFAB, 1157, 0, 1000, cat);
-
+                                    
             // 3. Permanent Pet Dyes - 1000 SOV
             Register<PetCubIntenseTeal>(1154732, 1024009, 0xFAB, 0, 2691, 1000, cat);
             Register<PetCubTyrianPurple>(1154735, 1024009, 0xFAB, 0, 2716, 1000, cat);

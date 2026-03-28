@@ -47,7 +47,12 @@ namespace Server.Mobiles
 
             this.VirtualArmor = 40;
             this.ControlSlots = 2;
-	    this.IsBonded = true;
+	        this.IsBonded = true;
+        }
+
+        public override bool CheckBondingOnDeath()
+        {
+            return false;
         }
 
         public SummonedAirElemental(Serial serial)

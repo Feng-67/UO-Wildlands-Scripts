@@ -18,14 +18,14 @@ namespace Server.Mobiles
             this.Name = NameList.RandomName("daemon");
             this.Body = 9;
             this.Hue = 532;
-	    this.BaseSoundID = 357;
+	        this.BaseSoundID = 357;
 
             this.SetStr(800);
             this.SetDex(200);
             this.SetInt(150);
 
-  	    this.SetHits(1000);          
-	    this.SetDamage(14, 21);
+  	        this.SetHits(1000);          
+	        this.SetDamage(14, 21);
 
             this.SetDamageType(ResistanceType.Physical, 0);
             this.SetDamageType(ResistanceType.Poison, 100);
@@ -46,7 +46,13 @@ namespace Server.Mobiles
 
             this.VirtualArmor = 58;
             this.ControlSlots = 4;
-	    this.IsBonded = true;
+            this.IsBonded = true;
+        }
+
+        public override bool OnBeforeDeath()
+        {
+            this.IsBonded = false;
+            return base.OnBeforeDeath();
         }
 
         public SummonedDaemon(Serial serial)

@@ -10,7 +10,7 @@ namespace Server.Mobiles
     public class Capybara : BaseMount
     {
         [Constructable]
-        public Capybara(): this("a capybara")
+        public Capybara(): this("Capybara")
         {
         }
 
@@ -45,7 +45,7 @@ namespace Server.Mobiles
             Karma = 300;
 
             Tamable = true;
-            ControlSlots = 1;
+            ControlSlots = 3;
             ControlSlotsMax = 5;
             MinTameSkill = 108;
         }
@@ -59,33 +59,22 @@ namespace Server.Mobiles
             get
             {
                 return new TrainingDefinition(
-                    typeof(Windrunner),
+                    typeof(Capybara),
                     Class.None,
-                    MagicalAbility.Ninjitsu |
-                    MagicalAbility.Bashing | MagicalAbility.Piercing |
-                    MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
-                    new SpecialAbility[] {
-                        SpecialAbility.VenomousBite, SpecialAbility.ViciousBite,
-                        SpecialAbility.ManaDrain, SpecialAbility.Repel,
-                        SpecialAbility.SearingWounds, SpecialAbility.LifeLeech
-                    },
-                    PetTrainingHelper.WepAbility2,
+                    MagicalAbility.WrestlingMastery | MagicalAbility.Bushido,
+                    PetTrainingHelper.SpecialAbilityClawedAndNecromantic,
+                    PetTrainingHelper.WepAbility1,
                     PetTrainingHelper.AreaEffectArea3,
                     3, 5);
             }
         }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
-        }
-
-
-        public override int Meat => 1;
-        public override int Hides => 6;
-        public override FoodType FavoriteFood => FoodType.Fish | FoodType.Meat | FoodType.FruitsAndVegies | FoodType.Eggs;
-
+                
+        public override FoodType FavoriteFood { get { return FoodType.Meat | FoodType.FruitsAndVegies | FoodType.Eggs; } }
+        public override bool CanAngerOnTame { get { return true; } }
+        public override bool StatLossAfterTame { get { return true; } }
+        public override int Hides { get { return 20; } }
+        public override int Meat { get { return 16; } }
+        
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

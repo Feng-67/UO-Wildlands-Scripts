@@ -17,7 +17,7 @@ namespace Server.Mobiles
 
         [Constructable]
         public SaintBernard()
-            : this("Great Dane")
+            : this("Saint Bernard")
         {
         }
 
@@ -72,12 +72,7 @@ namespace Server.Mobiles
         }
 
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Companion</BASEFONT>");
-        }
+              
 
         public override int GetAngerSound() { return 0x85; }
         public override int GetIdleSound() { return 0x85; }

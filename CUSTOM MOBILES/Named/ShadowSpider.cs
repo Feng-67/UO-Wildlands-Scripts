@@ -17,9 +17,9 @@ namespace Server.Mobiles
         public ShadowSpider()
             : base(AIType.AI_Melee, FightMode.Closest, 10, 1, 0.2, 0.4)
         {
-            Name = "a shadow spider";
+            Name = "Shadow Spider";
             Body = 737;
-            Hidden = true; 
+            //Hidden = true; 
 
             SetStr(100, 104);
             SetDex(200, 220);
@@ -57,6 +57,11 @@ namespace Server.Mobiles
         {
         }
 
+        public override bool CanAngerOnTame { get { return true; } }
+        public override int Meat { get { return 3; } }
+        public override int Hides { get { return 10; } }
+        public override FoodType FavoriteFood { get { return FoodType.Meat; } }
+
         public override TrainingDefinition TrainingDefinition
         {
             get
@@ -71,13 +76,7 @@ namespace Server.Mobiles
                     3, 5);
             }
         }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
-        }
-
+                
         public override void OnDamage(int amount, Mobile from, bool willKill)
         {
             RevealingAction();

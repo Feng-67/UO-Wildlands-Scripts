@@ -129,6 +129,7 @@ namespace Server.Engines.UOStore
             Register<SpellweavingBookFull>("Spellweaving Spellbook", 0, 0x2D50, 0, 0, 40, cat);
             Register<PowerScrollBook>("Power Scroll Book", 1155684, 0x9A95, 1153, 1153, 500, cat);
             Register<MarkRuneStone>("Mark Rune", 0, 0x1F14, 0x481, 0, 100, cat);
+            Register<LargeBODBox>("Large BOD Deed Box", 0, 0x9AA, 0, 0, 200, cat);
 
             Register<ReagentStorageChest>("Reagent Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<ScrollStorageChest>("Scroll Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
@@ -140,6 +141,7 @@ namespace Server.Engines.UOStore
             Register<StygianAbyssStorageChest>("Stygian Abyss Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<HighSeasStorageChest>("High Seas Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<DyeStorageChest>("Dye Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
+            Register<RefinementCabinet>("Refinement Cabinet", 0, 0xB2E7, 0, 0, 250, cat);
 
             Register<DavyJonesPoker>("Davy Jones' Iron Poker", 1041088, 0xF62, 2122, 1315, 50, cat);
             Register<BreakParalysisPotion>("Break Paralysis Potion", 0, 0xF09, 2543, 0, 5, cat);
@@ -147,7 +149,7 @@ namespace Server.Engines.UOStore
             Register<PowderOfTemperament>("Powder of Fortification", 0, 4102, 2419, 0, 35, cat);
             Register<ClothingBlessDeed>("Clothing Bless Deed", 0, 0x14F0, 0, 0, 500, cat);
             Register<MannequinDeed>("Mannequin Deed", 0, 0x14F0, 0, 0, 500, cat);
-            Register<SashOfHiding>("Sash of Hiding", 1041088, 0x1541, 21845, 0, 5000, cat);
+            
             Register<InstrumentCase>("Instrument Case", 0, 0xE7D, 0, 0, 150, cat);
             Register<RunebookStrap>("Runebook Strap", 0, 0xA721, 0, 0, 200, cat);
             Register<SpellbookStrap>("Spellbook Strap", 0, 0xA71F, 0, 0, 250, cat);

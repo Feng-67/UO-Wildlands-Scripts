@@ -13,7 +13,7 @@ namespace Server.Mobiles
     {
         [Constructable]
         public Windrunner()
-            : this("a windrunner")
+            : this("Windrunner")
         {
         }
 
@@ -67,13 +67,7 @@ namespace Server.Mobiles
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
-        }
-
+                
         public override TrainingDefinition TrainingDefinition
         {
             get

@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: LadyMelisande
+ * Wave Spawner: Orcs
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerLadyMelisande, then GM double-click to start.
- * 1-hour cooldown after LadyMelisande dies.
+ * Place with [add WaveSpawnerOrcs, then GM double-click to start.
+ * 1-hour cooldown after the Orc Brute Boss dies.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnLadyMelisande: Item
+    public class WaveSpawnOrcs: Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,23 +41,23 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(CuSidhe), 20)),
+                    (typeof(Orc), 30)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(Silvani), 5)),
+                    (typeof(OrcBomber), 20)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(OgreLord), 20)),
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Saliva), 10)),
+                    (typeof(OrcishLord), 20)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Satyr), 10))
+                    (typeof(OrcBrute), 10))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnLadyMelisande() : base(0xED4)
+        public WaveSpawnOrcs() : base(0xED4)
         {
-            Name    = "Wave Spawn: Lady Melisande ";
+            Name    = "Wave Spawn: Orcs";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnLadyMelisande(Serial serial) : base(serial) { }
+        public WaveSpawnOrcs(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x007);
-            Effects.PlaySound(Location, Map, 0x007);
+            Effects.PlaySound(Location, Map, 0x038);
+            Effects.PlaySound(Location, Map, 0x038);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x007);
-            AddMobile(typeof(LadyMelisande));
+            Effects.PlaySound(Location, Map, 0x039);
+            AddMobile(typeof(OrcBruteBoss));
             StartCheckTimer();
         }
 
@@ -249,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             Effects.PlaySound(Location, Map, 0x207);
-            BroadcastLocal("LADY MELISANDE HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            BroadcastLocal("THE ORC BOSS HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

@@ -22,7 +22,7 @@ namespace Server.Mobiles
             : base(name, 1440, 16079, AIType.AI_Mage, FightMode.Aggressor, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0x270;
-
+            
             SetStr(504, 700);
             SetDex(202, 300);
             SetInt(504, 700);
@@ -52,7 +52,7 @@ namespace Server.Mobiles
             Karma = 15000;
 
             Tamable = true;
-            ControlSlots = 2;
+            ControlSlots = 3;
             MinTameSkill = 108;
 
             SetMagicalAbility(MagicalAbility.Magery);
@@ -69,13 +69,7 @@ namespace Server.Mobiles
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
         public override FoodType FavoriteFood { get { return FoodType.FruitsAndVegies; } }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
-        }
-
+                
         public override TrainingDefinition TrainingDefinition
         {
             get
@@ -90,7 +84,7 @@ namespace Server.Mobiles
                     PetTrainingHelper.SpecialAbilityMagical2,
                     PetTrainingHelper.WepAbility2,
                     PetTrainingHelper.AreaEffectArea2,
-                    2, 5);
+                    3, 5);
             }
         }
 

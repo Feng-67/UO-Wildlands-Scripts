@@ -9,17 +9,17 @@ using Server.Items;
 
 namespace Server.Mobiles
 {
-    [CorpseName("an evil unicorn corpse")]
-    public class EvilUnicorn : BaseMount
+    [CorpseName("an black unicorn corpse")]
+    public class BlackUnicorn : BaseMount
     {
         [Constructable]
-        public EvilUnicorn()
-            : this("Evil Unicorn")
+        public BlackUnicorn()
+            : this("Black Unicorn")
         {
         }
 
         [Constructable]
-        public EvilUnicorn(string name)
+        public BlackUnicorn(string name)
             : base(name, 0x7A, 0x3EB4, AIType.AI_Necro, FightMode.Closest, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0x4BC; // Unicorn sounds
@@ -59,7 +59,7 @@ namespace Server.Mobiles
             this.SetMagicalAbility(MagicalAbility.Necromancy);
         }
 
-        public EvilUnicorn(Serial serial)
+        public BlackUnicorn(Serial serial)
             : base(serial)
         {
         }
@@ -69,7 +69,7 @@ namespace Server.Mobiles
             get
             {
                 return new TrainingDefinition(
-                    typeof(EvilUnicorn),
+                    typeof(BlackUnicorn),
                     Class.MagicalAndNecromantic,
                     MagicalAbility.Necromage | MagicalAbility.Poisoning | MagicalAbility.Discordance | MagicalAbility.MageryMastery | MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
                     PetTrainingHelper.SpecialAbilityNecroMagical,
@@ -84,18 +84,9 @@ namespace Server.Mobiles
 
         public override bool CanAngerOnTame { get { return true; } }
         public override bool StatLossAfterTame { get { return true; } }
-
         public override int Meat { get { return 3; } }
-        public override int Hides { get { return 10; } }
-        public override HideType HideType { get { return HideType.Barbed; } }
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
-        }
-                
+                                
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

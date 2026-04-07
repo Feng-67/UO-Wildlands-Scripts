@@ -9,17 +9,17 @@ using Server.Items;
 
 namespace Server.Mobiles
 {
-    [CorpseName("a good unicorn corpse")]
-    public class GoodUnicorn : BaseMount
+    [CorpseName("a rainbow unicorn corpse")]
+    public class RainbowUnicorn : BaseMount
     {
         [Constructable]
-        public GoodUnicorn()
-            : this("Good Unicorn")
+        public RainbowUnicorn()
+            : this("Rainbow Unicorn")
         {
         }
 
         [Constructable]
-        public GoodUnicorn(string name)
+        public RainbowUnicorn(string name)
             : base(name, 1407, 16075, AIType.AI_Mage, FightMode.Aggressor, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0x4BC; // Unicorn sounds
@@ -55,7 +55,7 @@ namespace Server.Mobiles
             MinTameSkill = 108;
         }
 
-        public GoodUnicorn(Serial serial)
+        public RainbowUnicorn(Serial serial)
             : base(serial)
         {
         }
@@ -65,7 +65,7 @@ namespace Server.Mobiles
             get
             {
                 return new TrainingDefinition(
-                    typeof(GoodUnicorn),
+                    typeof(RainbowUnicorn),
                     Class.Magical,
                     MagicalAbility.Chivalry | MagicalAbility.Discordance | MagicalAbility.MageryMastery | MagicalAbility.Mysticism | MagicalAbility.Spellweaving | MagicalAbility.Poisoning | MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
                     PetTrainingHelper.SpecialAbilityUnicorn,
@@ -77,17 +77,9 @@ namespace Server.Mobiles
 
         public override Poison PoisonImmune { get { return Poison.Lethal; } }
         public override bool CanAngerOnTame { get { return true; } }
-        public override int Meat { get { return 3; } }
-        public override int Hides { get { return 10; } }
-        public override HideType HideType { get { return HideType.Horned; } }
         public override FoodType FavoriteFood { get { return FoodType.FruitsAndVegies | FoodType.GrainsAndHay; } }
-
-        public override void AddNameProperties(ObjectPropertyList list)
-        {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
-        }
-
+        public override int Meat { get { return 3; } }
+        
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

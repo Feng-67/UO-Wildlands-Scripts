@@ -45,19 +45,28 @@ namespace Server.Items
 
                 // Wave 2
                 BuildWave(
-                    (typeof(CrystalLatticeSeeker), 5)),
+                    (typeof(CrystalLatticeSeeker), 10)),
+
+                BuildWave(
+                    (typeof(CrystalLatticeSeeker), 10)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(ColossusGuardian), 10)),
 
                 // Wave 4
                 BuildWave(
                     (typeof(CrystalHydra), 10)),
 
+                BuildWave(
+                    (typeof(CrystalHydra), 10)),
+
                 // Wave 5
                 BuildWave(
-                    (typeof(UnfrozenMummy), 5))
+                    (typeof(UnfrozenMummy), 10)),
+
+                BuildWave(
+                    (typeof(UnfrozenMummy), 10))
             };
         }
 
@@ -293,8 +302,11 @@ namespace Server.Items
                 m.OnAfterSpawn();
 
                 if (m is BaseCreature bc)
+                {
                     bc.Tamable = false;
-
+                    bc.Home = loc;
+                    bc.RangeHome = 20;
+                }
                 _spawned.Add(m);
             }
             catch { }

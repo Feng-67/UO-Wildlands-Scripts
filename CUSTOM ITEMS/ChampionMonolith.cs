@@ -98,7 +98,9 @@ namespace Server.Items
             { "TERRA-SANCTUM",          new Point3D(6022, 2914, 16) },
             { "TORTOISE",               new Point3D(5747, 4015, 1) },
             { "TWISTED-WEALD",          new Point3D(1450, 1475, -26) },
-            { "VALOR",                  new Point3D(338, 308, -54) }
+            { "VALOR",                  new Point3D(338, 308, -54) },
+            { "ORC-DUNGEON",            new Point3D(5294, 2031, 0) },
+            { "HYTHLOTH",               new Point3D(6049, 48, 0) }
         };
 
         public ChampionMonolithGump(Mobile from) : base(100, 100)

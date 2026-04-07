@@ -45,19 +45,28 @@ namespace Server.Items
 
                 // Wave 2
                 BuildWave(
-                    (typeof(Silvani), 5)),
+                    (typeof(Silvani), 10)),
+
+                BuildWave(
+                    (typeof(Silvani), 10)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(ColossusGuardian), 10)),
 
                 // Wave 4
                 BuildWave(
                     (typeof(Saliva), 10)),
 
+                BuildWave(
+                    (typeof(Saliva), 10)),
+
                 // Wave 5
                 BuildWave(
-                    (typeof(Satyr), 5))
+                    (typeof(Satyr), 10)),
+
+                BuildWave(
+                    (typeof(Satyr), 10))
             };
         }
 
@@ -293,8 +302,11 @@ namespace Server.Items
                 m.OnAfterSpawn();
 
                 if (m is BaseCreature bc)
+                {
                     bc.Tamable = false;
-
+                    bc.Home = loc;
+                    bc.RangeHome = 20;
+                }
                 _spawned.Add(m);
             }
             catch { }

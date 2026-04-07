@@ -657,31 +657,30 @@ namespace Server
 
 		public static SkillInfo[] Table { get { return m_Table; } set { m_Table = value; } }
 
-        // ↓ ADD HERE
         public static readonly HashSet<SkillName> FreeSkills = new HashSet<SkillName>
-    {
-        SkillName.ArmsLore,
-        SkillName.Begging,
-        SkillName.Fletching,
-        SkillName.Camping,
-        SkillName.Cartography,
-        SkillName.Cooking,
-        SkillName.DetectHidden,
-        SkillName.Fishing,
-        SkillName.Forensics,
-        SkillName.Herding,
-        SkillName.Hiding,
-        SkillName.ItemID,
-        SkillName.Lockpicking,
-        SkillName.Lumberjacking,
-        SkillName.Mining,
-        SkillName.RemoveTrap,
-        SkillName.TasteID,
-        SkillName.Tracking
-    };
-        // ↑ ADD HERE
+{
+    SkillName.ArmsLore,
+    SkillName.Begging,
+    SkillName.Camping,
+    SkillName.Cartography,
+    SkillName.Cooking,
+    SkillName.DetectHidden,
+    SkillName.Fishing,
+    SkillName.Forensics,
+    SkillName.Herding,
+    SkillName.Hiding,
+    SkillName.ItemID,
+    SkillName.Lockpicking,
+    SkillName.Lumberjacking,
+    SkillName.Mining,
+    SkillName.RemoveTrap,
+    SkillName.TasteID,
+    SkillName.Tracking,
+    SkillName.Alchemy,
+    SkillName.Inscribe
+};
 
-}
+    }
 
 
 

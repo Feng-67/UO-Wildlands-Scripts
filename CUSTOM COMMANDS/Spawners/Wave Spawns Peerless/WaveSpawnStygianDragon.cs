@@ -57,7 +57,7 @@ namespace Server.Items
 
                 // Wave 5
                 BuildWave(
-                    (typeof(ShadowWyrm), 5))
+                    (typeof(ShadowWyrm), 10))
             };
         }
 
@@ -293,8 +293,11 @@ namespace Server.Items
                 m.OnAfterSpawn();
 
                 if (m is BaseCreature bc)
+                {
                     bc.Tamable = false;
-
+                    bc.Home = loc;
+                    bc.RangeHome = 20;
+                }
                 _spawned.Add(m);
             }
             catch { }

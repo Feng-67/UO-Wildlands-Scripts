@@ -73,12 +73,21 @@ namespace Server.Mobiles
         public override int Meat { get { return 16; } }
         public override HideType HideType { get { return HideType.Horned; } }
 
-        public override void AddNameProperties(ObjectPropertyList list)
+        public override TrainingDefinition TrainingDefinition
         {
-            base.AddNameProperties(list);
-            list.Add("<BASEFONT COLOR=#FFD700>Exotic</BASEFONT>");
+            get
+            {
+                return new TrainingDefinition(
+                    typeof(AncientHellhound),
+                    Class.ClawedTailedNecromanticAndTokuno,
+                    MagicalAbility.Wolf | MagicalAbility.Poisoning | MagicalAbility.Discordance | MagicalAbility.Necromancy,
+                    PetTrainingHelper.SpecialAbilityClawedAndNecromantic,
+                    PetTrainingHelper.WepAbility2,
+                    PetTrainingHelper.AreaEffectArea2,
+                    3, 5);
+            }
         }
-                
+                                
         public override void OnAfterTame(Mobile tamer)
         {
             if (Owners.Count == 0 && PetTrainingHelper.Enabled)

@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Good Unicorn
+ * Wave Spawner: Capybara
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerGoodUnicorn, then GM double-click to start.
- * 1-hour cooldown after Good Unicorn is tamed or dies.
+ * Place with [add WaveSpawnCapybara, then GM double-click to start.
+ * 1-hour cooldown after Capybara is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnGoodUnicorn : Item
+    public class WaveSpawnCapybara: Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,32 +41,23 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(CrystalDaemon), 20)),
+                    (typeof(OphidianKnight), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(CrystalLatticeSeeker), 10)),
-
-                BuildWave(
-                    (typeof(CrystalLatticeSeeker), 10)),
+                    (typeof(StoneGargoyle), 5)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 10)),
+                    (typeof(ColossusGuardian), 5)),
 
                 // Wave 4
                 BuildWave(
-                    (typeof(CrystalHydra), 10)),
-
-                BuildWave(
-                    (typeof(CrystalHydra), 10)),
+                    (typeof(Dragon), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(UnfrozenMummy), 10)),
-
-                BuildWave(
-                    (typeof(UnfrozenMummy), 10))
+                    (typeof(Balron), 10))
             };
         }
 
@@ -83,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnGoodUnicorn() : base(0xED4)
+        public WaveSpawnCapybara() : base(0xED4)
         {
-            Name    = "Wave Spawn: Good Unicorn";
+            Name    = "Wave Spawn: Capybara";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnGoodUnicorn(Serial serial) : base(serial) { }
+        public WaveSpawnCapybara(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -179,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x0F6);
-            Effects.PlaySound(Location, Map, 0x0F6);
+            Effects.PlaySound(Location, Map, 0x016);
+            Effects.PlaySound(Location, Map, 0x016);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -193,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x0F6);
-            AddMobile(typeof(GoodUnicorn));
+            Effects.PlaySound(Location, Map, 0x016);
+            AddMobile(typeof(Capybara));
             StartCheckTimer();
         }
 
@@ -258,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE SHIMMERING EFFUSION HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("THE MEDUSA HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

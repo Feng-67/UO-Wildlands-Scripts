@@ -5,7 +5,7 @@
  *
  * Wave Spawner: Dreadhorn
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerDreadhorn, then GM double-click to start.
+ * Place with [add WaveSpawnDreadhorn, then GM double-click to start.
  * 1-hour cooldown after Dreadhorn dies.
  */
 

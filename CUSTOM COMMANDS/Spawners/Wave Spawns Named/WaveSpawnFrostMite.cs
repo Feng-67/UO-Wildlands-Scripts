@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Windrunner
+ * Wave Spawner: Frost Mite Mount
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerWindrunner, then GM double-click to start.
- * 1-hour cooldown after Windrunner is tamed or killed.
+ * Place with [add WaveSpawnFrostMiteMount, then GM double-click to start.
+ * 1-hour cooldown after Frost Mite Mount dies.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnWindrunner : Item
+    public class WaveSpawnFrostMiteMount : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -39,13 +39,13 @@ namespace Server.Items
         {
             return new Type[][]
             {
-                 // Wave 1
+                // Wave 1
                 BuildWave(
-                    (typeof(Ninja), 20)),
+                    (typeof(DreadSpider), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(FanDancer), 5)),
+                    (typeof(Malefic), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Ronin), 10)),
+                    (typeof(Silk), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Oni), 10))
+                    (typeof(Balron), 10))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnWindrunner() : base(0xED4)
+        public WaveSpawnFrostMiteMount() : base(0xED4)
         {
-            Name    = "Wave Spawn: Windrunner";
+            Name    = "Wave Spawn: Frost Mite Mount";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnWindrunner(Serial serial) : base(serial) { }
+        public WaveSpawnFrostMiteMount(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x004);
-            Effects.PlaySound(Location, Map, 0x004);
+            Effects.PlaySound(Location, Map, 0x008);
+            Effects.PlaySound(Location, Map, 0x008);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x004);
-            AddMobile(typeof(Windrunner));
+            Effects.PlaySound(Location, Map, 0x008);
+            AddMobile(typeof(FrostMiteMount));
             StartCheckTimer();
         }
 
@@ -249,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE STYGIAN DRAGON HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("THE DREADHORN HAS BEEN SLAIN! THE FOREST IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

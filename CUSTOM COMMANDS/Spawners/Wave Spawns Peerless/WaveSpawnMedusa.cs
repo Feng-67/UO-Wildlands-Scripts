@@ -5,7 +5,7 @@
  *
  * Wave Spawner: Medusa
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerMedusa, then GM double-click to start.
+ * Place with [add WaveSpawnMedusa, then GM double-click to start.
  * 1-hour cooldown after Medusa dies.
  */
 

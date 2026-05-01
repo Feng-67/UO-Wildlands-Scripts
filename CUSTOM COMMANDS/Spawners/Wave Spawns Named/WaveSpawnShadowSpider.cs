@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Eowmu
+ * Wave Spawner: Shadow Spider
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerEowmu, then GM double-click to start.
- * 1-hour cooldown after Eowmu is tamed or killed.
+ * Place with [add WaveSpawnShadowSpider, then GM double-click to start.
+ * 1-hour cooldown after Shadow Spider is tamed or is killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnEowmu : Item
+    public class WaveSpawnShadowSpider : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(FairyDragon), 20)),
+                    (typeof(DreadSpider), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(Dragon), 5)),
+                    (typeof(Malefic), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(GreaterDragon), 10)),
+                    (typeof(Silk), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(ShadowWyrm), 10))
+                    (typeof(Balron), 10))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnEowmu() : base(0xED4)
+        public WaveSpawnShadowSpider() : base(0xED4)
         {
-            Name    = "Wave Spawn: Eowmu";
+            Name    = "Wave Spawn: Shadow Spider";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnEowmu(Serial serial) : base(serial) { }
+        public WaveSpawnShadowSpider(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x009);
-            Effects.PlaySound(Location, Map, 0x009);
+            Effects.PlaySound(Location, Map, 0x008);
+            Effects.PlaySound(Location, Map, 0x008);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x009);
-            AddMobile(typeof(Eowmu));
+            Effects.PlaySound(Location, Map, 0x008);
+            AddMobile(typeof(ShadowSpider));
             StartCheckTimer();
         }
 
@@ -210,7 +210,7 @@ namespace Server.Items
                 int nextWave = _currentWave + 1;
                 if (nextWave >= Waves.Length)
                 {
-                    BroadcastLocal("ALL WAVES DEFEATED! A CREATURE APPROACHES...", 0x22);
+                    BroadcastLocal("ALL WAVES DEFEATED! A CRATURE APPROACHES...", 0x22);
 
                     // Lightning strikes over the next 6 seconds before the boss spawns
                     for (int i = 0; i < 6; i++)
@@ -249,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("TRAVESTY HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("THE DREADHORN HAS BEEN SLAIN! THE FOREST IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

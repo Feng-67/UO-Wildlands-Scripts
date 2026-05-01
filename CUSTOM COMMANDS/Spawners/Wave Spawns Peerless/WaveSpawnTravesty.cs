@@ -5,7 +5,7 @@
  *
  * Wave Spawner: Travesty
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerTravesty, then GM double-click to start.
+ * Place with [add WaveSpawnTravesty, then GM double-click to start.
  * 1-hour cooldown after Travesty dies.
  */
 

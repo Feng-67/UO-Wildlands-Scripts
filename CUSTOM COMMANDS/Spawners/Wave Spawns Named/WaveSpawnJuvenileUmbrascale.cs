@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Capybara
+ * Wave Spawner: JuvenileUmbrascale
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerCapybara, then GM double-click to start.
- * 1-hour cooldown after Capybara is tamed or killed.
+ * Place with [add WaveSpawnJuvenileUmbrascale, then GM double-click to start.
+ * 1-hour cooldown after JuvenileUmbrascale is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnCapybara: Item
+    public class WaveSpawnJuvenileUmbrascale : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(OphidianKnight), 20)),
+                    (typeof(Drake), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(StoneGargoyle), 5)),
+                    (typeof(Dragon), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Dragon), 10)),
+                    (typeof(GreaterDragon), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Balron), 10))
+                    (typeof(ShadowWyrm), 10))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnCapybara() : base(0xED4)
+        public WaveSpawnJuvenileUmbrascale() : base(0xED4)
         {
-            Name    = "Wave Spawn: Capybara";
+            Name    = "Wave Spawn: Juvenile Umbrascale";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnCapybara(Serial serial) : base(serial) { }
+        public WaveSpawnJuvenileUmbrascale(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x016);
-            Effects.PlaySound(Location, Map, 0x016);
+            Effects.PlaySound(Location, Map, 0x009);
+            Effects.PlaySound(Location, Map, 0x009);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x016);
-            AddMobile(typeof(Capybara));
+            Effects.PlaySound(Location, Map, 0x009);
+            AddMobile(typeof(JuvenileUmbrascale));
             StartCheckTimer();
         }
 
@@ -249,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE MEDUSA HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("TRAVESTY HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

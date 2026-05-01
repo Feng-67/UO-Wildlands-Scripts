@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Ancient Hellhound
+ * Wave Spawner: Black Unicorn
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerAncientHellhound, then GM double-click to start.
- * 1-hour cooldown after Ancient Hellhound is tamed or killed.
+ * Place with [add WaveSpawnBlackUnicorn, then GM double-click to start.
+ * 1-hour cooldown after Black Unicorn is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnAncientHellhound: Item
+    public class WaveSpawnBlackUnicorn : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,23 +41,32 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(InterredGrizzle), 20)),
+                    (typeof(CuSidhe), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(PlagueBeastLord), 5)),
+                    (typeof(Silvani), 10)),
+
+                BuildWave(
+                    (typeof(Silvani), 10)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(ColossusGuardian), 10)),
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Daemon), 10)),
+                    (typeof(Saliva), 10)),
+
+                BuildWave(
+                    (typeof(Saliva), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Balron), 10))
+                    (typeof(Satyr), 10)),
+
+                BuildWave(
+                    (typeof(Satyr), 10))
             };
         }
 
@@ -74,15 +83,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnAncientHellhound() : base(0xED4)
+        public WaveSpawnBlackUnicorn() : base(0xED4)
         {
-            Name    = "Wave Spawn: Ancient Hellhound";
+            Name    = "Wave Spawn: Black Unicorn ";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnAncientHellhound(Serial serial) : base(serial) { }
+        public WaveSpawnBlackUnicorn(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +179,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x166);
-            Effects.PlaySound(Location, Map, 0x166);
+            Effects.PlaySound(Location, Map, 0x007);
+            Effects.PlaySound(Location, Map, 0x007);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +193,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x166);
-            AddMobile(typeof(AncientHellhound));
+            Effects.PlaySound(Location, Map, 0x007);
+            AddMobile(typeof(BlackUnicorn));
             StartCheckTimer();
         }
 
@@ -249,7 +258,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("CHIEF PAROXYSMUS HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("WaveSpawnBlackUnicorn HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

@@ -5,7 +5,7 @@
  *
  * Wave Spawner: Stygian Dragon
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerStygianDragon, then GM double-click to start.
+ * Place with [add WaveSpawnStygianDragon, then GM double-click to start.
  * 1-hour cooldown after Stygian Dragon dies.
  */
 

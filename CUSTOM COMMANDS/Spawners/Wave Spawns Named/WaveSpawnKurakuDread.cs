@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Frost Mite Mount
+ * Wave Spawner: KurakuDread
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerFrostMiteMount, then GM double-click to start.
- * 1-hour cooldown after Frost Mite Mount dies.
+ * Place with [add WaveSpawnKurakuDread, then GM double-click to start.
+ * 1-hour cooldown after KurakuDread is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnFrostMiteMount : Item
+    public class WaveSpawnKurakuDread : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(DreadSpider), 20)),
+                    (typeof(WildTiger), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(Malefic), 5)),
+                    (typeof(SabertoothedTiger), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Silk), 10)),
+                    (typeof(Triceratops), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Balron), 10))
+                    (typeof(TRex), 1))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnFrostMiteMount() : base(0xED4)
+        public WaveSpawnKurakuDread() : base(0xED4)
         {
-            Name    = "Wave Spawn: Frost Mite Mount";
+            Name    = "Wave Spawn: Kuraku Dread";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnFrostMiteMount(Serial serial) : base(serial) { }
+        public WaveSpawnKurakuDread(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x008);
-            Effects.PlaySound(Location, Map, 0x008);
+            Effects.PlaySound(Location, Map, 0x009);
+            Effects.PlaySound(Location, Map, 0x009);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x008);
-            AddMobile(typeof(FrostMiteMount));
+            Effects.PlaySound(Location, Map, 0x009);
+            AddMobile(typeof(KurakuDread));
             StartCheckTimer();
         }
 
@@ -249,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE DREADHORN HAS BEEN SLAIN! THE FOREST IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("TRAVESTY HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

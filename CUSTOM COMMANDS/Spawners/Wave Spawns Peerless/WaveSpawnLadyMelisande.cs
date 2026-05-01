@@ -5,7 +5,7 @@
  *
  * Wave Spawner: LadyMelisande
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerLadyMelisande, then GM double-click to start.
+ * Place with [add WaveSpawnLadyMelisande, then GM double-click to start.
  * 1-hour cooldown after LadyMelisande dies.
  */
 

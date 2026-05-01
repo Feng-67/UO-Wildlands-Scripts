@@ -5,7 +5,7 @@
  *
  * Wave Spawner: Monstrous Interred Grizzle
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerMonstrousInterredGrizzle, then GM double-click to start.
+ * Place with [add WaveSpawnMonstrousInterredGrizzle, then GM double-click to start.
  * 1-hour cooldown after Monstrous Interred Grizzle dies.
  */
 

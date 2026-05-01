@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Skeletal Cat
+ * Wave Spawner: Rainbow Unicorn
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnerSkeletalCat, then GM double-click to start.
- * 1-hour cooldown after Skeletal Cat is tamed or killed.
+ * Place with [add WaveSpawnRainbowUnicorn, then GM double-click to start.
+ * 1-hour cooldown after Rainbow Unicorn is tamed or dies.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnSkeletalCat : Item
+    public class WaveSpawnRainbowUnicorn : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,23 +41,32 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(GoreFiend), 20)),
+                    (typeof(CrystalDaemon), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(RottingCorpse), 5)),
+                    (typeof(CrystalLatticeSeeker), 10)),
+
+                BuildWave(
+                    (typeof(CrystalLatticeSeeker), 10)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(ColossusGuardian), 10)),
 
                 // Wave 4
                 BuildWave(
-                    (typeof(SkeletalLich), 10)),
+                    (typeof(CrystalHydra), 10)),
+
+                BuildWave(
+                    (typeof(CrystalHydra), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(RedDeath), 10))
+                    (typeof(UnfrozenMummy), 10)),
+
+                BuildWave(
+                    (typeof(UnfrozenMummy), 10))
             };
         }
 
@@ -74,15 +83,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnSkeletalCat() : base(0xED4)
+        public WaveSpawnRainbowUnicorn() : base(0xED4)
         {
-            Name    = "Wave Spawn: Skeletal Cat";
+            Name    = "Wave Spawn: Good Unicorn";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnSkeletalCat(Serial serial) : base(serial) { }
+        public WaveSpawnRainbowUnicorn(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +179,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x100);
-            Effects.PlaySound(Location, Map, 0x100);
+            Effects.PlaySound(Location, Map, 0x0F6);
+            Effects.PlaySound(Location, Map, 0x0F6);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +193,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x100);
-            AddMobile(typeof(SkeletalCat));
+            Effects.PlaySound(Location, Map, 0x0F6);
+            AddMobile(typeof(RainbowUnicorn));
             StartCheckTimer();
         }
 
@@ -210,7 +219,7 @@ namespace Server.Items
                 int nextWave = _currentWave + 1;
                 if (nextWave >= Waves.Length)
                 {
-                    BroadcastLocal("ALL WAVES DEFEATED! A CRATURE APPROACHES...", 0x22);
+                    BroadcastLocal("ALL WAVES DEFEATED! A CREATURE APPROACHES...", 0x22);
 
                     // Lightning strikes over the next 6 seconds before the boss spawns
                     for (int i = 0; i < 6; i++)
@@ -220,9 +229,7 @@ namespace Server.Items
                         {
                             int x = X + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
                             int y = Y + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
-
-                            // Replaced Map.GetAverageZ(x, y)
-                            int z = this.Z;
+                            int z = Map.GetAverageZ(x, y);
                             Point3D strikeLocation = new Point3D(x, y, z);
 
                             EffectMobile em = EffectMobile.Create(strikeLocation, Map, EffectMobile.DefaultDuration);
@@ -251,7 +258,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE MONSTROUS INTERRED GRIZZLE HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("Rainbow HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }
@@ -311,9 +318,7 @@ namespace Server.Items
             {
                 int x = X + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
                 int y = Y + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
-
-                // Replaced Map.GetAverageZ(x, y)
-                int z = this.Z;
+                int z = Map.GetAverageZ(x, y);
 
                 if (Map.CanSpawnMobile(x, y, z))
                     return new Point3D(x, y, z);

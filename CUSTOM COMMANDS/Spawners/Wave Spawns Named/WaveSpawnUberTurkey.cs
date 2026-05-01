@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Shimmering Effusion
+ * Wave Spawner: UberTurkey
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnShimmeringEffusion, then GM double-click to start.
- * 1-hour cooldown after Shimmering Effusion dies.
+ * Place with [add WaveSpawnUberTurkey, then GM double-click to start.
+ * 1-hour cooldown after UberTurkey is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnShimmeringEffusion : Item
+    public class WaveSpawnUberTurkey : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(CrystalDaemon), 20)),
+                    (typeof(DireWolf), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(CrystalLatticeSeeker), 5)),
+                    (typeof(LeatherWolf), 10)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(CrystalHydra), 10)),
+                    (typeof(RatmanArcher), 20)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(UnfrozenMummy), 10))
+                    (typeof(PlagueBeastLord), 5))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnShimmeringEffusion() : base(0xED4)
+        public WaveSpawnUberTurkey() : base(0xED4)
         {
-            Name    = "Wave Spawn: Shimmering Effusion";
+            Name    = "Wave Spawn: Uber Turkey";
             Movable = false;
             Visible = false;
             StartProximityTimer();
         }
 
-        public WaveSpawnShimmeringEffusion(Serial serial) : base(serial) { }
+        public WaveSpawnUberTurkey(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x0F6);
-            Effects.PlaySound(Location, Map, 0x0F6);
+            Effects.PlaySound(Location, Map, 0x009);
+            Effects.PlaySound(Location, Map, 0x009);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x0F6);
-            AddMobile(typeof(ShimmeringEffusion));
+            Effects.PlaySound(Location, Map, 0x009);
+            AddMobile(typeof(UberTurkey));
             StartCheckTimer();
         }
 
@@ -210,7 +210,7 @@ namespace Server.Items
                 int nextWave = _currentWave + 1;
                 if (nextWave >= Waves.Length)
                 {
-                    BroadcastLocal("ALL WAVES DEFEATED! AN EVIL APPROACHES...", 0x22);
+                    BroadcastLocal("ALL WAVES DEFEATED! A CREATURE APPROACHES...", 0x22);
 
                     // Lightning strikes over the next 6 seconds before the boss spawns
                     for (int i = 0; i < 6; i++)
@@ -248,8 +248,8 @@ namespace Server.Items
             _cooldownEnd = DateTime.UtcNow + TimeSpan.FromHours(1.0);
             _spawned.Clear();
 
-            Effects.PlaySound(Location, Map, 0x207);
-            BroadcastLocal("THE SHIMMERING EFFUSION HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //Effects.PlaySound(Location, Map, 0x207);
+            //BroadcastLocal("TRAVESTY HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }

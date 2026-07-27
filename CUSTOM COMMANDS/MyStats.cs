@@ -212,7 +212,7 @@ namespace Server.Gumps
 
             // --- SKILL LIST ---
             int skillY = colY + 365;
-            AddLabel(340, skillY - 20, C_YELLOW, "Real Skills");
+            AddLabel(340, skillY - 20, C_YELLOW, "Skills");
 
             int count = 0;
             int startX = 340;

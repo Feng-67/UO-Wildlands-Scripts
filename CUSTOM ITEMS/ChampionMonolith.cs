@@ -31,7 +31,7 @@ namespace Server.Items
         public override void OnDoubleClick(Mobile from)
         {
             // 1. Check if the item is locked down (AccessLevel check allows staff to test anywhere)
-            if (!this.IsLockedDown && from.AccessLevel == AccessLevel.Player)
+            if (!this.IsLockedDown && this.Movable && from.AccessLevel == AccessLevel.Player)
             {
                 from.SendMessage("The Monolith's power can only be harnessed while it is locked down.");
                 return;

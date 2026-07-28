@@ -155,6 +155,7 @@ namespace Server.Engines.UOStore
             Register<SpellbookStrap>("Spellbook Strap", 0, 0xA71F, 0, 0, 250, cat);
             Register<TrashBarrelPortable>("Portable Trash Barrel", 0, 0xE77, 0x386, 0, 25, cat);
             Register<HooksShield>("Hook's Shield", 0, 0xA64A, 0, 0, 1000, cat);
+            Register<LordMorphiusEpaulettes>("Lord Morphius' Epaulettes", 0, 0x9985, 0, 0, 10000, cat);
             Register<ChampionMonolith>("Champion Monolith", 0, 41066, 0, 0, 1000, cat);
             Register<VaseOfVirtue>("Vase of Virtue", 0, 0xB189, 0, 0, 1000, cat);
             Register<LockpickingChest>("Lockpicking Chest", 0, 0x9AA, 0, 0, 50, cat);

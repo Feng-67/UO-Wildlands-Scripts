@@ -22,10 +22,7 @@ namespace Server.Mobiles
         {
             // 1652 is the BodyValue, 16095 is the MountID
             BaseSoundID = 0xA8;
-
-            //FavoriteFood = FoodType.Meat;
-            //PackInstinct = PackInstinct.Equine;
-
+                        
             SetStr(460, 460);
             SetDex(180, 180);
             SetInt(300, 300);
@@ -65,9 +62,13 @@ namespace Server.Mobiles
         //                         Bushido | Ninjitsu | BattleDefense |
         //                         Bashing | Piercing | Slashing | WrestlingMastery
         //
-        // SpecialAbilityCoconutCrab = AngryFire | ConductiveBlast | DragonBreath | Inferno |
-        //                             LightningForce | ManaDrain | RagingBreath | Repel |
-        //                             SearingWounds | VenomousBite | ViciousBite
+        // Special Abilities (inline — no PetTrainingHelper preset matches this
+        // exact 12-item list; closest is SpecialAbilityTriton, which adds
+        // StealLife and VenomousBite that aren't on the Spritelight Forager's
+        // actual training sheet):
+        // AngryFire | ConductiveBlast | DragonBreath | Inferno |
+        // LightningForce | ManaDrain | RagingBreath | Repel |
+        // SearingWounds | StickySkin | TailSwipe | ViciousBite
         //
         // WepAbility2    = 16-move set including ColdWind and Dismount
         // AreaEffectArea2 = all 6 area effects
@@ -79,8 +80,22 @@ namespace Server.Mobiles
                 return new TrainingDefinition(
                     typeof(SpritelightForager),
                     Class.Magical | Class.Tokuno,
-                    MagicalAbility.Triton,
-                    PetTrainingHelper.SpecialAbilityCoconutCrab,
+                    MagicalAbility.Triton | MagicalAbility.Bushido | MagicalAbility.Ninjitsu,
+                    new SpecialAbility[]
+                    {
+                        SpecialAbility.AngryFire,
+                        SpecialAbility.ConductiveBlast,
+                        SpecialAbility.DragonBreath,
+                        SpecialAbility.Inferno,
+                        SpecialAbility.LightningForce,
+                        SpecialAbility.ManaDrain,
+                        SpecialAbility.RagingBreath,
+                        SpecialAbility.Repel,
+                        SpecialAbility.SearingWounds,
+                        SpecialAbility.StickySkin,
+                        SpecialAbility.TailSwipe,
+                        SpecialAbility.ViciousBite
+                    },
                     PetTrainingHelper.WepAbility2,
                     PetTrainingHelper.AreaEffectArea2,
                     2, 5);
@@ -90,7 +105,7 @@ namespace Server.Mobiles
         public SpritelightForager(Serial serial) : base(serial)
         {
         }
-
+        public override FoodType FavoriteFood { get { return FoodType.Meat; } }
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

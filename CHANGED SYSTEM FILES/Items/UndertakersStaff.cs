@@ -68,61 +68,48 @@ namespace Server.Items
                 }
             }
 
-            if (foundCorpse != null)
-            {
-                // NEW: Logic to grab equipped items (armor/clothing) as well as bag items
-                List<Item> itemsToMove = new List<Item>(foundCorpse.Items);
-
-                // Also check for items "worn" by the corpse that aren't in the main list
-                foreach (Item equipped in foundCorpse.EquipItems)
-                {
-                    if (equipped != null && !equipped.Deleted)
-                        itemsToMove.Add(equipped);
-                }
-
-                // Destroy all gold on the corpse
-                List<Item> goldToDelete = new List<Item>();
-                foreach (Item item in itemsToMove)
-                {
-                    if (item is Gold)
-                    {
-                        goldToDelete.Add(item);
-                    }
-                }
-
-                foreach (Item gold in goldToDelete)
-                {
-                    itemsToMove.Remove(gold);
-                    gold.Delete();
-                }
-
-                if (itemsToMove.Count > 0)
-                {
-                    foreach (Item item in itemsToMove)
-                    {
-                        from.AddToBackpack(item);
-                    }
-
-                    from.SendMessage("The staff glows brightly, pulling all your gear through the ether!");
-                    from.SendMessage("The gold you carried was destroyed!");
-                    from.PlaySound(0x1F2); // Play a 'summoning' sound effect
-                    from.FixedParticles(0x3709, 10, 30, 5052, EffectLayer.LeftFoot); // Add a visual sparkle
-
-                    m_Charges--;
-                    if (m_Charges <= 0)
-                    {
-                        from.SendMessage("The staff crumbles.");
-                        this.Delete();
-                    }
-                }
-                else
-                {
-                    from.SendMessage("Your corpse was found, but it appears to have already been looted.");
-                }
-            }
-            else
+            if (foundCorpse == null)
             {
                 from.SendMessage("No corpse belonging to you was found on this facet.");
+                return;
+            }
+
+            // Destroy all gold sitting on the corpse before it changes hands
+            List<Item> goldToDelete = new List<Item>();
+            foreach (Item item in foundCorpse.Items)
+            {
+                if (item is Gold)
+                    goldToDelete.Add(item);
+            }
+
+            foreach (Item gold in goldToDelete)
+                gold.Delete();
+
+            if (foundCorpse.Items.Count == 0)
+            {
+                from.SendMessage("Your corpse was found, but it appears to have already been looted.");
+                return;
+            }
+
+            // Bring the actual corpse to the player rather than copying its
+            // contents into the backpack. Corpse.Open() is the same self-loot
+            // routine the client triggers when a player double clicks their
+            // own corpse - it re-equips worn items to the paperdoll and
+            // restores backpack items to their original positions, instead of
+            // dumping everything loose into the top of the backpack.
+            foundCorpse.MoveToWorld(from.Location, from.Map);
+            foundCorpse.Open(from, true);
+
+            from.SendMessage("The staff glows brightly, pulling your corpse through the ether!");
+            from.SendMessage("The gold you carried was destroyed!");
+            from.PlaySound(0x1F2); // Play a 'summoning' sound effect
+            from.FixedParticles(0x3709, 10, 30, 5052, EffectLayer.LeftFoot); // Add a visual sparkle
+
+            m_Charges--;
+            if (m_Charges <= 0)
+            {
+                from.SendMessage("The staff crumbles.");
+                this.Delete();
             }
         }
 

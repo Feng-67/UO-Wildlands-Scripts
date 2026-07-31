@@ -101,6 +101,8 @@ namespace Server.Items
 		
 		private List<Item> items;
 		
+		private List<Corpse> corpses;
+		
 		private InternalItem m_Item;
 		
 		[Constructable]
@@ -153,7 +155,7 @@ namespace Server.Items
 			{
 				if (GetItems(from))
 				{
-					from.SendGump(new CorpseRetrievalStoneGump(from, items, totalCost));
+					from.SendGump(new CorpseRetrievalStoneGump(from, items, corpses, totalCost));
 				}
 				else
 				{
@@ -196,15 +198,17 @@ namespace Server.Items
 		{
 			List<Item> worldItems = new List<Item>(World.Items.Values);
 			
-			List<Corpse> corpses = new List<Corpse>();
+			List<Corpse> foundCorpses = new List<Corpse>();
 			
 			foreach (Item i in worldItems)
 			{
-				if (i is Corpse && ((Corpse)i).Owner == from)
+				if (i is Corpse && ((Corpse)i).Owner == from && !i.Deleted)
 				{
-					corpses.Add(((Corpse)i));
+					foundCorpses.Add(((Corpse)i));
 				}
 			}
+			
+			corpses = foundCorpses;
 			
 			items = new List<Item>();
 			
@@ -214,20 +218,32 @@ namespace Server.Items
 			{
 				foreach (Corpse corpse in corpses)
 				{
+                    // Destroy gold on the corpse instead of retrieving it
+                    List<Item> goldOnCorpse = new List<Item>();
+
+                    foreach (Item item in corpse.Items)
+                    {
+                        if (item is Gold)
+                        {
+                            goldOnCorpse.Add(item);
+                        }
+                    }
+
+                    foreach (Item gold in goldOnCorpse)
+                    {
+                        gold.Delete();
+                    }
+
+                    // Build the preview list shown in the gump. The corpse
+                    // itself (not these individual items) is what actually
+                    // gets moved to the player on confirmation, so equipped
+                    // items and backpack positions are restored correctly.
                     foreach (Item item in corpse.Items)
                     {
                         if (item != null && !(item.Deleted))
                         {
-                            // Destroy gold instead of retrieving it
-                            if (item is Gold)
-                            {
-                                item.Delete();
-                            }
-                            else
-                            {
-                                items.Add(item);
-                                totalweight += item.Weight;
-                            }
+                            items.Add(item);
+                            totalweight += item.Weight;
                         }
                     }
                 }
@@ -359,6 +375,8 @@ namespace Server.Items
 		
 		private List<Item> items;
 		
+		private List<Corpse> corpses;
+		
 		private InternalItem m_Item;
 		
 		[Constructable]
@@ -411,7 +429,7 @@ namespace Server.Items
 			{
 				if (GetItems(from))
 				{
-					from.SendGump(new CorpseRetrievalStoneGump(from, items, totalCost));
+					from.SendGump(new CorpseRetrievalStoneGump(from, items, corpses, totalCost));
 				}
 				else
 				{
@@ -454,15 +472,17 @@ namespace Server.Items
 		{
 			List<Item> worldItems = new List<Item>(World.Items.Values);
 			
-			List<Corpse> corpses = new List<Corpse>();
+			List<Corpse> foundCorpses = new List<Corpse>();
 			
 			foreach (Item i in worldItems)
 			{
-				if (i is Corpse && ((Corpse)i).Owner == from)
+				if (i is Corpse && ((Corpse)i).Owner == from && !i.Deleted)
 				{
-					corpses.Add(((Corpse)i));
+					foundCorpses.Add(((Corpse)i));
 				}
 			}
+			
+			corpses = foundCorpses;
 			
 			items = new List<Item>();
 			
@@ -472,20 +492,32 @@ namespace Server.Items
 			{
 				foreach (Corpse corpse in corpses)
 				{
+                    // Destroy gold on the corpse instead of retrieving it
+                    List<Item> goldOnCorpse = new List<Item>();
+
+                    foreach (Item item in corpse.Items)
+                    {
+                        if (item is Gold)
+                        {
+                            goldOnCorpse.Add(item);
+                        }
+                    }
+
+                    foreach (Item gold in goldOnCorpse)
+                    {
+                        gold.Delete();
+                    }
+
+                    // Build the preview list shown in the gump. The corpse
+                    // itself (not these individual items) is what actually
+                    // gets moved to the player on confirmation, so equipped
+                    // items and backpack positions are restored correctly.
                     foreach (Item item in corpse.Items)
                     {
                         if (item != null && !(item.Deleted))
                         {
-                            // Destroy gold instead of retrieving it
-                            if (item is Gold)
-                            {
-                                item.Delete();
-                            }
-                            else
-                            {
-                                items.Add(item);
-                                totalweight += item.Weight;
-                            }
+                            items.Add(item);
+                            totalweight += item.Weight;
                         }
                     }
                 }
@@ -618,13 +650,17 @@ namespace Server.Gumps
 		
 		private List<Item> m_Items;
 		
+		private List<Corpse> m_Corpses;
+		
 		private int m_TotalCost;
 
-		public CorpseRetrievalStoneGump(Mobile from, List<Item> items, int totalCost) : base(0, 0)
+		public CorpseRetrievalStoneGump(Mobile from, List<Item> items, List<Corpse> corpses, int totalCost) : base(0, 0)
 		{
 			m_From = from;
 			
 			m_Items = items;
+			
+			m_Corpses = corpses;
 			
 			m_TotalCost = totalCost;
 			
@@ -660,9 +696,20 @@ namespace Server.Gumps
 			{
 				if (MakePayment(m_From, m_TotalCost))
 				{
-					foreach (Item i in m_Items)
+					// Bring each corpse to the player rather than copying its
+					// contents into the backpack. Corpse.Open() is the same
+					// self-loot routine the client triggers when a player
+					// double clicks their own corpse - it re-equips worn
+					// items to the paperdoll and restores backpack items to
+					// their original positions, instead of dumping
+					// everything loose into the top of the backpack.
+					foreach (Corpse corpse in m_Corpses)
 					{
-						m_From.Backpack.AddItem(i);
+						if (corpse != null && !corpse.Deleted)
+						{
+							corpse.MoveToWorld(m_From.Location, m_From.Map);
+							corpse.Open(m_From, true);
+						}
 					}
 		
 					m_From.SendLocalizedMessage(1062471); // You quickly gather all of your belongings.

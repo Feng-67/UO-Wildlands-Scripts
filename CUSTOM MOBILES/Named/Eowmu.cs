@@ -69,7 +69,7 @@ namespace Server.Mobiles
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
         public override FoodType FavoriteFood { get { return FoodType.FruitsAndVegies; } }
-                
+
         public override TrainingDefinition TrainingDefinition
         {
             get
@@ -79,9 +79,16 @@ namespace Server.Mobiles
                     Class.MagicalAndTailed,
                     MagicalAbility.MageryMastery | MagicalAbility.Mysticism | MagicalAbility.Spellweaving |
                     MagicalAbility.Chivalry | MagicalAbility.Discordance | MagicalAbility.Poisoning |
+                    MagicalAbility.Bushido | MagicalAbility.Ninjitsu | MagicalAbility.BattleDefense |
                     MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing |
                     MagicalAbility.WrestlingMastery,
-                    PetTrainingHelper.SpecialAbilityMagical2,
+                    new SpecialAbility[]
+                    {
+                        SpecialAbility.AngryFire, SpecialAbility.ConductiveBlast, SpecialAbility.DragonBreath,
+                        SpecialAbility.GraspingClaw, SpecialAbility.Inferno, SpecialAbility.LightningForce,
+                        SpecialAbility.ManaDrain, SpecialAbility.RagingBreath, SpecialAbility.Repel,
+                        SpecialAbility.SearingWounds, SpecialAbility.VenomousBite, SpecialAbility.ViciousBite
+                    },
                     PetTrainingHelper.WepAbility2,
                     PetTrainingHelper.AreaEffectArea2,
                     3, 5);

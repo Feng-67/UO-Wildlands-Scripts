@@ -14,7 +14,7 @@ namespace Server.Mobiles
     {
         [Constructable]
         public FrostMiteMount()
-            : this("Frost Mite")
+            : this("Frost Mite Mount")
         {
         }
 
@@ -70,7 +70,7 @@ namespace Server.Mobiles
         {
         }
 
-        public override bool CanAngerOnTame { get { return true; } }
+        //public override bool CanAngerOnTame { get { return true; } }
         public override int Meat { get { return 3; } }
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
 
@@ -81,10 +81,14 @@ namespace Server.Mobiles
                 return new TrainingDefinition(
                     typeof(FrostMiteMount),
                     Class.ClawedTailedNecromanticAndTokuno,
-                    MagicalAbility.Poisoning | MagicalAbility.Piercing,
-                    PetTrainingHelper.SpecialAbilityClawedAndNecromantic,
+                    MagicalAbility.Poisoning,
+                    new SpecialAbility[]
+                    {
+                SpecialAbility.ManaDrain, SpecialAbility.Repel, SpecialAbility.RuneCorruption,
+                SpecialAbility.SearingWounds, SpecialAbility.VenomousBite, SpecialAbility.ViciousBite
+                    },
                     PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
+                    PetTrainingHelper.AreaEffectArea3,
                     3, 5);
             }
         }

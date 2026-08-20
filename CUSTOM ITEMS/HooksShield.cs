@@ -13,6 +13,14 @@ namespace Server.Items
     {
         public override bool IsArtifact { get { return true; } }
 
+        // Override resistances here
+        public override int BasePhysicalResistance { get { return 0; } }
+        public override int BaseFireResistance { get { return 10; } }
+        public override int BaseColdResistance { get { return 0; } }
+        public override int BasePoisonResistance { get { return 0; } }
+        public override int BaseEnergyResistance { get { return 10; } }
+
+
         [Constructable]
         public HooksShield()
         {
@@ -29,11 +37,7 @@ namespace Server.Items
             Attributes.CastSpeed = 1;         // Faster Casting 1
             Attributes.SpellDamage = 10;      // Spell Damage Increase 10%
             Attributes.DefendChance = 15;     // Defense Chance Increase 15%
-            
-            // Resistances
-            //FireResistance = 10;
-            //PoisonResistance = 10;
-            
+                                   
             // Requirement adjustment
             ArmorAttributes.LowerStatReq = 100;
         }

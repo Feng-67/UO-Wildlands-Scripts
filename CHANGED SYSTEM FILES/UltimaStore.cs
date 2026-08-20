@@ -95,6 +95,24 @@ namespace Server.Engines.UOStore
             // Format: Type, NameCliloc, DescCliloc, ItemID, Hue, TooltipCliloc, Price, Category
 
             // Category: Power Scrolls / Miscellaneous
+            // ===== Stat Cap Scrolls =====
+            int baseStatCap = Config.Get("PlayerCaps.TotalStatCap", 225);
+
+            Register<StatCapScroll>("Stat Cap Scroll (+5)", 1049469, 0x2258, 0, 0x481, 1000, cat,
+                (m, e) => new StatCapScroll(baseStatCap + 5));
+
+            Register<StatCapScroll>("Stat Cap Scroll (+10)", 1049469, 0x2258, 0, 0x481, 2000, cat,
+                (m, e) => new StatCapScroll(baseStatCap + 10));
+
+            Register<StatCapScroll>("Stat Cap Scroll (+15)", 1049469, 0x2258, 0, 0x481, 3000, cat,
+                (m, e) => new StatCapScroll(baseStatCap + 15));
+
+            Register<StatCapScroll>("Stat Cap Scroll (+20)", 1049469, 0x2258, 0, 0x481, 4000, cat,
+                (m, e) => new StatCapScroll(baseStatCap + 20));
+
+            Register<StatCapScroll>("Stat Cap Scroll (+25)", 1049469, 0x2258, 0, 0x481, 5000, cat,
+                (m, e) => new StatCapScroll(baseStatCap + 25));
+
             Register<ChampionPowerScroll>("Champion's Power Scroll", 1041088, 0x2258, 1021108, 0, 5000, cat);
             Register<MythicCharacterToken>(new TextDefinition[] { 1156614, 1156615 }, 1156679, 0x2AAA, 0, 0, 2500, cat);
             Register<CharacterReincarnationToken>(new TextDefinition[] { 1156612, 1156615 }, 1156677, 0x2AAA, 0, 0, 2000, cat);

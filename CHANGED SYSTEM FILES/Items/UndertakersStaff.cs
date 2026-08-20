@@ -74,16 +74,12 @@ namespace Server.Items
                 return;
             }
 
-            // Destroy all gold sitting on the corpse before it changes hands
-            List<Item> goldToDelete = new List<Item>();
-            foreach (Item item in foundCorpse.Items)
+            // Destroy all gold sitting on the corpse before it changes hands,
+            // including gold tucked inside any bags/containers on the corpse
+            foreach (Item item in new List<Item>(foundCorpse.Items))
             {
-                if (item is Gold)
-                    goldToDelete.Add(item);
+                DeleteGoldRecursively(item);
             }
-
-            foreach (Item gold in goldToDelete)
-                gold.Delete();
 
             if (foundCorpse.Items.Count == 0)
             {
@@ -114,6 +110,29 @@ namespace Server.Items
         }
 
         public static void TryRemoveTimer(Mobile m) { }
+
+        // Recursively deletes any Gold found on an item - itself, or nested
+        // inside any container (e.g. a bag left on the corpse). Non-gold
+        // containers are left intact; only the gold inside them is removed.
+        private static void DeleteGoldRecursively(Item item)
+        {
+            if (item == null || item.Deleted)
+                return;
+
+            if (item is Gold)
+            {
+                item.Delete();
+                return;
+            }
+
+            if (item is Container)
+            {
+                foreach (Item child in new List<Item>(((Container)item).Items))
+                {
+                    DeleteGoldRecursively(child);
+                }
+            }
+        }
 
         public UndertakersStaff(Serial serial) : base(serial) { }
 

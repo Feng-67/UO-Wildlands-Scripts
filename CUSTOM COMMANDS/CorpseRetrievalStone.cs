@@ -68,6 +68,29 @@ namespace Server
             return null;
         }
 
+        // Recursively deletes any Gold found on an item - itself, or nested
+        // inside any container (e.g. a bag left on the corpse). Non-gold
+        // containers are left intact; only the gold inside them is removed.
+        public static void DeleteGoldRecursively(Item item)
+        {
+            if (item == null || item.Deleted)
+                return;
+
+            if (item is Gold)
+            {
+                item.Delete();
+                return;
+            }
+
+            if (item is Container)
+            {
+                foreach (Item child in new List<Item>(((Container)item).Items))
+                {
+                    DeleteGoldRecursively(child);
+                }
+            }
+        }
+
         public class ResurrectEntry : ContextMenuEntry
 		{
 			private readonly Mobile m_Mobile;
@@ -218,20 +241,11 @@ namespace Server.Items
 			{
 				foreach (Corpse corpse in corpses)
 				{
-                    // Destroy gold on the corpse instead of retrieving it
-                    List<Item> goldOnCorpse = new List<Item>();
-
-                    foreach (Item item in corpse.Items)
+                    // Destroy gold on the corpse instead of retrieving it,
+                    // including gold nested inside any bags on the corpse
+                    foreach (Item item in new List<Item>(corpse.Items))
                     {
-                        if (item is Gold)
-                        {
-                            goldOnCorpse.Add(item);
-                        }
-                    }
-
-                    foreach (Item gold in goldOnCorpse)
-                    {
-                        gold.Delete();
+                        ResurrectHelper.DeleteGoldRecursively(item);
                     }
 
                     // Build the preview list shown in the gump. The corpse
@@ -492,20 +506,11 @@ namespace Server.Items
 			{
 				foreach (Corpse corpse in corpses)
 				{
-                    // Destroy gold on the corpse instead of retrieving it
-                    List<Item> goldOnCorpse = new List<Item>();
-
-                    foreach (Item item in corpse.Items)
+                    // Destroy gold on the corpse instead of retrieving it,
+                    // including gold nested inside any bags on the corpse
+                    foreach (Item item in new List<Item>(corpse.Items))
                     {
-                        if (item is Gold)
-                        {
-                            goldOnCorpse.Add(item);
-                        }
-                    }
-
-                    foreach (Item gold in goldOnCorpse)
-                    {
-                        gold.Delete();
+                        ResurrectHelper.DeleteGoldRecursively(item);
                     }
 
                     // Build the preview list shown in the gump. The corpse

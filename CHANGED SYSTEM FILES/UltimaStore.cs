@@ -443,6 +443,23 @@ namespace Server.Engines.UOStore
             Register<CubTyrianPurple>(1154735, 0, 0xEFF, 0, 2716, 1000, cat);
             Register<CubIntenseTeal>(1154732, 0, 0xEFF, 0, 2691, 1000, cat);
 
+            // === Special Natural Dyes ===
+            // These dyes use the SpecialNaturalDye class with specific DyeType values
+            
+            RegisterSpecialNaturalDye(DyeType.WindAzul, 1157277, 400, cat);
+            RegisterSpecialNaturalDye(DyeType.DullRuby, 1157267, 400, cat);
+            RegisterSpecialNaturalDye(DyeType.PoppieWhite, 1157271, 400, cat);
+            RegisterSpecialNaturalDye(DyeType.ZentoOrchid, 1157268, 400, cat);
+            RegisterSpecialNaturalDye(DyeType.UmbranViolet, 1157276, 400, cat);
+
+            // === Special Natural Dyes (Books Only) ===
+            // These can only be used on spellbooks
+            RegisterSpecialNaturalDye(DyeType.WindAzul, 1157277, 400, cat, true);
+            RegisterSpecialNaturalDye(DyeType.DullRuby, 1157267, 400, cat, true);
+            RegisterSpecialNaturalDye(DyeType.PoppieWhite, 1157271, 400, cat, true);
+            RegisterSpecialNaturalDye(DyeType.ZentoOrchid, 1157268, 400, cat, true);
+            RegisterSpecialNaturalDye(DyeType.UmbranViolet, 1157276, 400, cat, true);
+
             Register<HaochisPigment>(new TextDefinition[] { 1071249, 1157275 }, 1156671, 0, 0x9CBF, 0, 400, cat, ConstructHaochisPigment); // Heartwood Sienna
             Register<HaochisPigment>(new TextDefinition[] { 1071249, 1157274 }, 1156671, 0, 0x9CBD, 0, 400, cat, ConstructHaochisPigment); // Campion White
             Register<HaochisPigment>(new TextDefinition[] { 1071249, 1157273 }, 1156671, 0, 0x9CC2, 0, 400, cat, ConstructHaochisPigment); // Yewish Pine
@@ -582,6 +599,22 @@ namespace Server.Engines.UOStore
         public static void Register(StoreEntry entry)
         {
             Entries.Add(entry);
+        }
+
+        public static void RegisterSpecialNaturalDye(DyeType type, int nameCliloc, int cost, StoreCategory cat, bool booksOnly = false)
+        {
+            if (SpecialNaturalDye.HueInfo == null || !SpecialNaturalDye.HueInfo.ContainsKey(type))
+            {
+                return;
+            }
+
+            int hue = SpecialNaturalDye.HueInfo[type].Item1;
+
+            TextDefinition[] name = booksOnly
+                ? new TextDefinition[] { 1157205, nameCliloc } // Spellbook Only Dye - <Color>
+                : new TextDefinition[] { 1112136, nameCliloc }; // Special Natural Dye - <Color>
+
+            Register<SpecialNaturalDye>(name, 1112136, 0x182B, 0, hue, cost, cat, (m, e) => new SpecialNaturalDye(type, booksOnly));
         }
 
         public static bool CanSearch(Mobile m)

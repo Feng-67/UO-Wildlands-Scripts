@@ -72,6 +72,7 @@ namespace Server.Items
             if (item is NaturalDye || item is NaturalHairDye || item is PlantPigment) return true;
             if (item is BaseCubStoreDye || item is BasePetCubDye) return true;
             if (item is DyeTub || item is Dyes) return true;
+            if (item is SpecialNaturalDye) return true;
 
             string n = item.GetType().Name;
             return n.Contains("Pigment") || n.Contains("Dye") || n.Contains("HairDye");
@@ -85,6 +86,7 @@ namespace Server.Items
             if (item is NaturalDye nd) return typeName + "|" + (int)nd.PigmentHue;
             if (item is PlantPigment pp) return typeName + "|" + (int)pp.PigmentHue;
             if (item is NaturalHairDye nhd) return typeName + "|" + (int)nhd.Type;
+            if (item is SpecialNaturalDye snd) return typeName + "|" + (int)snd.DyeType + "|" + (snd.BooksOnly ? "1" : "0");
 
             // For Tokuno Pigments, Haochis, Abyssal Hair Dyes, etc.
             if (item.Hue != 0) return typeName + "|" + item.Hue;
@@ -97,8 +99,15 @@ namespace Server.Items
             if (!IsDye(item)) return 0;
 
             string key = GenerateKey(item);
-            int amountToAdd = item.Amount;
-                        
+
+            // Items that track UsesRemaining aren't stackable - Amount is always 1 regardless
+            // of how many uses are left. Pool actual remaining charges instead, or a deposit
+            // would silently discard whatever uses had already been spent.
+            int amountToAdd = GetUsesRemaining(item, out bool tracksUses);
+            if (!tracksUses) amountToAdd = item.Amount;
+
+            if (amountToAdd <= 0) return 0;
+
             if (Content.ContainsKey(key)) Content[key] += amountToAdd;
             else Content[key] = amountToAdd;
 
@@ -106,10 +115,24 @@ namespace Server.Items
             return amountToAdd;
         }
 
+        // Returns the item's remaining charges via whichever UsesRemaining property it exposes,
+        // and reports (via tracksUses) whether it has one at all.
+        private static int GetUsesRemaining(Item item, out bool tracksUses)
+        {
+            if (item is SpecialNaturalDye snd) { tracksUses = true; return snd.UsesRemaining; }
+            if (item is NaturalDye nd) { tracksUses = true; return nd.UsesRemaining; }
+            if (item is BaseCubStoreDye cd) { tracksUses = true; return cd.UsesRemaining; }
+            if (item is HaochisPigment hp) { tracksUses = true; return hp.UsesRemaining; }
+            if (item is PigmentsOfTokuno pot) { tracksUses = true; return pot.UsesRemaining; }
+
+            tracksUses = false;
+            return 0;
+        }
+
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);
-            writer.Write(0); // version
+            writer.Write(1); // version - incremented for SpecialNaturalDye support
             writer.Write(Content.Count);
             foreach (var kvp in Content)
             {
@@ -121,7 +144,7 @@ namespace Server.Items
         public override void Deserialize(GenericReader reader)
         {
             base.Deserialize(reader);
-            reader.ReadInt(); // version
+            int version = reader.ReadInt(); // version
             int count = reader.ReadInt();
             for (int i = 0; i < count; i++)
             {
@@ -168,7 +191,7 @@ namespace Server.Items
 
             int y = 55;
             AddLabel(70, y, 1152, "Dye Type");
-            AddLabel(240, y, 1152, "Amount");
+            AddLabel(300, y, 1152, "Uses");
             AddImageTiled(20, y + 22, Width - 40, 2, 96);
 
             List<string> keys = new List<string>(m_Chest.Content.Keys);
@@ -184,15 +207,13 @@ namespace Server.Items
                 string key = keys[i];
                 AddButton(30, y + 3, 0x837, 0x838, 1000 + i, GumpButtonType.Reply, 0);
                 AddLabel(50, y, 1153, GetLabelName(key));
-                AddLabel(240, y, 0x481, m_Chest.Content[key].ToString());
+                AddLabel(300, y, 0x481, m_Chest.Content[key].ToString());
                 y += 20;
             }
 
             if (end < count) AddButton(Width - 40, 20, 0x15E1, 0x15E5, 2, GumpButtonType.Reply, 0);
             if (m_Page > 0) AddButton(Width - 75, 20, 0x15E3, 0x15E7, 1, GumpButtonType.Reply, 0);
         }
-
-
 
         private string GetLabelName(string key)
         {
@@ -211,6 +232,14 @@ namespace Server.Items
 
                 if (typeName == "NaturalHairDye")
                     return "Hair Dye: " + ((HairDyeType)data).ToString();
+
+                if (typeName == "SpecialNaturalDye")
+                {
+                    string dyeName = ((DyeType)data).ToString();
+                    if (parts.Length > 2 && parts[2] == "1")
+                        return "Special Dye: " + dyeName + " (Books Only)";
+                    return "Special Dye: " + dyeName;
+                }
 
                 if (typeName.StartsWith("Cub")) return typeName.Replace("Cub", "") + " (Cub)";
                 if (typeName.StartsWith("PetCub")) return typeName.Replace("PetCub", "") + " (Pet)";
@@ -283,30 +312,116 @@ namespace Server.Items
             Type typeToWithdraw = ScriptCompiler.FindTypeByFullName(typeName);
             if (typeToWithdraw == null) return null;
 
+            // SpecialNaturalDye has no parameterless constructor, so it can't go through
+            // Activator.CreateInstance(typeToWithdraw) below - build it directly instead.
+            if (typeToWithdraw == typeof(SpecialNaturalDye))
+            {
+                DyeType dyeType = DyeType.None;
+                bool booksOnly = false;
+
+                if (parts.Length > 1)
+                {
+                    dyeType = (DyeType)int.Parse(parts[1]);
+                    booksOnly = parts.Length > 2 && parts[2] == "1";
+                }
+
+                // Pull as many uses as are available, capped at 5 (a freshly-made dye's max),
+                // and only deduct that many from the pool - not the whole stack at once.
+                int uses = Math.Min(available, 5);
+                deducted = uses;
+
+                SpecialNaturalDye dye = new SpecialNaturalDye(dyeType, booksOnly);
+                dye.UsesRemaining = uses;
+                return dye;
+            }
+
             Item item = (Item)Activator.CreateInstance(typeToWithdraw);
 
             // Reapply saved Hue or Enums
             if (parts.Length > 1)
             {
                 int data = int.Parse(parts[1]);
-                if (item is NaturalDye nd) nd.PigmentHue = (PlantPigmentHue)data;
-                else if (item is PlantPigment pp) pp.PigmentHue = (PlantPigmentHue)data;
-                else if (item is NaturalHairDye nhd) nhd.Type = (HairDyeType)data;
-                else item.Hue = data;
-            }
 
-            if (item is NaturalDye d)
-            {
-                deducted = 1;
-                // d.UsesRemaining stays at its default (full uses)
-            }
-            else if (item is BaseCubStoreDye cd)
-            {
-                deducted = 1;
-                // cd.UsesRemaining stays at its default
+                if (item is NaturalDye nd) 
+                {
+                    nd.PigmentHue = (PlantPigmentHue)data;
+
+                    // Uses were pooled on deposit (see TryAdd) - pull up to 5 back out
+                    // (a freshly-made dye's max) instead of leaving it at its constructor default.
+                    int uses = Math.Min(available, 5);
+                    deducted = uses;
+                    nd.UsesRemaining = uses;
+                }
+                else if (item is PlantPigment pp) 
+                {
+                    pp.PigmentHue = (PlantPigmentHue)data;
+                    deducted = 1;
+                }
+                else if (item is NaturalHairDye nhd) 
+                {
+                    nhd.Type = (HairDyeType)data;
+                    deducted = 1;
+                }
+                else if (item is BaseCubStoreDye cd)
+                {
+                    // Uses were pooled on deposit (see TryAdd) - pull up to 5 back out
+                    // (a freshly-made dye's max) instead of leaving it at its constructor default.
+                    int uses = Math.Min(available, 5);
+                    deducted = uses;
+                    cd.UsesRemaining = uses;
+                }
+                else if (item is HaochisPigment hp)
+                {
+                    // The generic Activator.CreateInstance() call above used HaochisPigment's
+                    // parameterless constructor, which defaults to Type=None (Hue=0, grey).
+                    // The stored key holds the deposited item's Hue (see GenerateKey's fallback
+                    // for Hue-tracked items) - reverse-look it up against the color table and
+                    // reapply it via Type, which cascades Hue + Label back onto the item.
+                    var info = HaochisPigment.Table.FirstOrDefault(x => x.Hue == data);
+                    hp.Type = info != null ? info.Type : HaochisPigmentType.None;
+
+                    // Uses were pooled on deposit (see TryAdd) - pull up to 50 back out
+                    // (Haochi's Pigments hold 50 uses) instead of leaving it at its constructor default.
+                    int uses = Math.Min(available, 50);
+                    deducted = uses;
+                    hp.UsesRemaining = uses;
+                }
+                else if (item is PigmentsOfTokuno pot)
+                {
+                    // Same problem as HaochisPigment above, but PigmentsOfTokuno.Table is a plain
+                    // int[][] indexed directly by PigmentType's ordinal (Table[i][0] = Hue), not a
+                    // searchable field pair - so find the matching row index instead.
+                    PigmentType type = PigmentType.None;
+                    int[][] table = PigmentsOfTokuno.Table;
+
+                    for (int i = 0; i < table.Length; i++)
+                    {
+                        if (table[i][0] == data)
+                        {
+                            type = (PigmentType)i;
+                            break;
+                        }
+                    }
+
+                    pot.Type = type;
+
+                    // Max uses depends on the color: PigmentType.None and FadedCoal-and-later
+                    // ("Coal family") pigments hold 10, everything else holds 50 - mirrors
+                    // PigmentsOfTokuno's own (PigmentType type) constructor logic.
+                    int maxUses = (type == PigmentType.None || type >= PigmentType.FadedCoal) ? 10 : 50;
+                    int uses = Math.Min(available, maxUses);
+                    deducted = uses;
+                    pot.UsesRemaining = uses;
+                }
+                else
+                {
+                    deducted = Math.Min(available, 60000);
+                    item.Amount = deducted;
+                }
             }
             else
             {
+                // For items without hue data
                 deducted = Math.Min(available, 60000);
                 item.Amount = deducted;
             }

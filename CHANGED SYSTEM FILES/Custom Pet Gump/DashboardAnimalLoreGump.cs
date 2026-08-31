@@ -12,6 +12,7 @@ using Server.Mobiles;
 using Server.Targeting;
 using System.Collections.Generic;
 using System.Linq;
+using Server.Misc;
 
 namespace Server.Mobiles
 {
@@ -184,14 +185,13 @@ namespace Server.Mobiles
             var profile = PetTrainingHelper.GetAbilityProfile(m_Creature, true);
 
             AddLabel(c1X, regenY + 25, C_WHITE, "Hit Point Regeneration");
-            AddLabel(c1X + 220, regenY + 25, C_WHITE, profile.RegenHits.ToString());
+            AddLabel(c1X + 220, regenY + 25, C_WHITE, ((int)RegenRates.HitPointRegen(m_Creature)).ToString());
 
             AddLabel(c1X, regenY + 45, C_WHITE, "Stamina Regeneration");
-            AddLabel(c1X + 220, regenY + 45, C_WHITE, profile.RegenStam.ToString());
+            AddLabel(c1X + 220, regenY + 45, C_WHITE, ((int)RegenRates.StamRegen(m_Creature)).ToString());
 
-            // --- MANA REGENERATION (LEFT COLUMN) ---
             AddLabel(c1X, regenY + 65, C_WHITE, "Mana Regeneration");
-            AddLabel(c1X + 220, regenY + 65, C_WHITE, profile.RegenMana.ToString());
+            AddLabel(c1X + 220, regenY + 65, C_WHITE, ((int)RegenRates.ManaRegen(m_Creature)).ToString());
 
             // --- SPECIAL ABILITIES HEADING (RIGHT COLUMN - ALIGNED) ---
             // Changed + 36 to + 65 to match Mana Regeneration exactly

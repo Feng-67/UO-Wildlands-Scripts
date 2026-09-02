@@ -8,17 +8,17 @@ using System;
 
 namespace Server.Mobiles
 {
-    [CorpseName("a windrunner corpse")]
-    public class Windrunner : BaseMount
+    [CorpseName("a dread wolf corpse")]
+    public class DreadWolf : BaseMount
     {
         [Constructable]
-        public Windrunner()
-            : this("Windrunner")
+        public DreadWolf()
+            : this("dread wolf")
         {
         }
 
         [Constructable]
-        public Windrunner(string name)
+        public DreadWolf(string name)
             : base(name, 1410, 16076, AIType.AI_Melee, FightMode.Closest, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0xA8;
@@ -53,11 +53,10 @@ namespace Server.Mobiles
             
             Tamable = true;
             ControlSlots = 3;
-            ControlSlotsMax = 5;
             MinTameSkill = 108;
         }
 
-        public Windrunner(Serial serial)
+        public DreadWolf(Serial serial)
             : base(serial)
         {
         }
@@ -67,28 +66,7 @@ namespace Server.Mobiles
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-                
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(Windrunner),
-                    Class.None,
-                    MagicalAbility.Ninjitsu |
-                    MagicalAbility.Bashing | MagicalAbility.Piercing |
-                    MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
-                    new SpecialAbility[] {
-                        SpecialAbility.VenomousBite, SpecialAbility.ViciousBite,
-                        SpecialAbility.ManaDrain, SpecialAbility.Repel,
-                        SpecialAbility.SearingWounds, SpecialAbility.LifeLeech
-                    },
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea3,
-                    3, 5);
-            }
-        }
-
+              
         public override int GetIdleSound()
         {
             return 0x577;

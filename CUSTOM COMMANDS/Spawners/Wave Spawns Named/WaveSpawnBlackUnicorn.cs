@@ -88,7 +88,7 @@ namespace Server.Items
             Name    = "Wave Spawn: Black Unicorn ";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
         public WaveSpawnBlackUnicorn(Serial serial) : base(serial) { }
@@ -387,7 +387,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

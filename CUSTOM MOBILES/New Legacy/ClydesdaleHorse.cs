@@ -130,41 +130,7 @@ namespace Server.Mobiles
                 return elapsed >= LastStandCooldown ? TimeSpan.Zero : LastStandCooldown - elapsed;
             }
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        //
-        // MagicalAbility.Dragon1  = Bashing | BattleDefense | Chivalry | Discordance |
-        //                           MageryMastery | Mysticism | Piercing | Poisoning |
-        //                           Slashing | Spellweaving | WrestlingMastery
-        //
-        // SpecialAbilityCoconutCrab = AngryFire | ConductiveBlast | DragonBreath | Inferno |
-        //                             LightningForce | ManaDrain | RagingBreath | Repel |
-        //                             SearingWounds | VenomousBite | ViciousBite
-        //
-        // WepAbility2  = ArmorIgnore | ArmorPierce | Bladeweave | BleedAttack | ColdWind |
-        //               ConcussionBlow | CrushingBlow | Dismount | Feint | ForceOfNature |
-        //               FrenziedWhirlwind | MortalStrike | NerveStrike | ParalyzingBlow |
-        //               PsychicAttack | TalonStrike
-        //
-        // AreaEffectArea2 = EssenceOfEarth | ExplosiveGoo | AuraOfEnergy |
-        //                   AuraOfNausea | EssenceOfDisease | PoisonBreath
-        // ------------------------------------------------------------------
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(ClydesdaleHorse),
-                    Class.Magical,
-                    MagicalAbility.Dragon1,
-                    PetTrainingHelper.SpecialAbilityCoconutCrab,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    1, 5);
-            }
-        }
+               
 
         // ------------------------------------------------------------------
         // Serialization  (version 1 adds m_LastStandUsed)

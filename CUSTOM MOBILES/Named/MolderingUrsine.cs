@@ -59,44 +59,12 @@ namespace Server.Mobiles
             // --- Innate Special Ability ---
             SetSpecialAbility(SpecialAbility.LifeLeech);
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        //
-        // Class.ClawedNecromanticAndTokuno = Clawed | Necromantic | Tokuno
-        //   → signals the training system the pet has Clawed (bear),
-        //     Necromantic schools, and Tokuno (Bushido + Ninjitsu)
-        //
-        // MagicalAbility: No named composite covers all 15 listed abilities.
-        //   MagicalAbility.Triton covers 13 (incl. Bushido+Ninjitsu but
-        //   excl. Necromage+Necromancy). The extra two are OR'd in directly.
-        //   Triton | Necromage | Necromancy = all 15 exactly.
-        //
-        // Special: inline { LifeLeech } — only one trainable special ability
-        //   listed; same pattern used for FlameOfKindlehart's { Inferno }.
-        //
-        // WepAbility2     = full 16-move set including ColdWind and Dismount
-        // AreaEffectArea2 = all 6 area effects (EssenceOfEarth is present)
-        // ------------------------------------------------------------------
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(MolderingUrsine),
-                    Class.ClawedNecromanticAndTokuno,
-                    MagicalAbility.Triton | MagicalAbility.Necromage | MagicalAbility.Necromancy,
-                    new SpecialAbility[] { SpecialAbility.LifeLeech },
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    3, 5);
-            }
-        }
-
+              
+        
         public override bool CanAngerOnTame { get { return true; } }
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
-        public override FoodType FavoriteFood { get { return FoodType.Fish; } }
+        public override FoodType FavoriteFood { get { return FoodType.Meat; } }
 
         public MolderingUrsine(Serial serial) : base(serial)
         {

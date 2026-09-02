@@ -8,17 +8,17 @@ using System;
 
 namespace Server.Mobiles
 {
-    [CorpseName("an eowmu corpse")]
-    public class Eowmu : BaseMount
+    [CorpseName("an moon unicorn corpse")]
+    public class MoonUnicorn : BaseMount
     {
         [Constructable]
-        public Eowmu()
-            : this("Eowmu")
+        public MoonUnicorn()
+            : this("MoonUnicorn")
         {
         }
 
         [Constructable]
-        public Eowmu(string name)
+        public MoonUnicorn(string name)
             : base(name, 1440, 16079, AIType.AI_Mage, FightMode.Aggressor, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0x270;
@@ -54,13 +54,10 @@ namespace Server.Mobiles
             Tamable = true;
             ControlSlots = 3;
             MinTameSkill = 108;
-
-            SetMagicalAbility(MagicalAbility.Magery);
-            SetSpecialAbility(SpecialAbility.TailSwipe);
-            SetAreaEffect(AreaEffect.AuraOfEnergy);
+         
         }
 
-        public Eowmu(Serial serial)
+        public MoonUnicorn(Serial serial)
             : base(serial)
         {
         }
@@ -68,33 +65,8 @@ namespace Server.Mobiles
         public override bool CanAngerOnTame { get { return true; } }
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
-        public override FoodType FavoriteFood { get { return FoodType.FruitsAndVegies; } }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(Eowmu),
-                    Class.MagicalAndTailed,
-                    MagicalAbility.MageryMastery | MagicalAbility.Mysticism | MagicalAbility.Spellweaving |
-                    MagicalAbility.Chivalry | MagicalAbility.Discordance | MagicalAbility.Poisoning |
-                    MagicalAbility.Bushido | MagicalAbility.Ninjitsu | MagicalAbility.BattleDefense |
-                    MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing |
-                    MagicalAbility.WrestlingMastery,
-                    new SpecialAbility[]
-                    {
-                        SpecialAbility.AngryFire, SpecialAbility.ConductiveBlast, SpecialAbility.DragonBreath,
-                        SpecialAbility.GraspingClaw, SpecialAbility.Inferno, SpecialAbility.LightningForce,
-                        SpecialAbility.ManaDrain, SpecialAbility.RagingBreath, SpecialAbility.Repel,
-                        SpecialAbility.SearingWounds, SpecialAbility.VenomousBite, SpecialAbility.ViciousBite
-                    },
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    3, 5);
-            }
-        }
-
+        public override FoodType FavoriteFood { get { return FoodType.Meat; } }
+                
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

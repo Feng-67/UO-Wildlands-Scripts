@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Windrunner
+ * Wave Spawner: Dread Wolf
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnWindrunner, then GM double-click to start.
- * 1-hour cooldown after Windrunner is tamed or killed.
+ * Place with [add WaveSpawnDreadWolf, then GM double-click to start.
+ * 1-hour cooldown after Dread Wolf is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnWindrunner : Item
+    public class WaveSpawnDreadWolf : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnWindrunner() : base(0xED4)
+        public WaveSpawnDreadWolf() : base(0xED4)
         {
-            Name    = "Wave Spawn: Windrunner";
+            Name    = "Wave Spawn: Dread Wolf";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
-        public WaveSpawnWindrunner(Serial serial) : base(serial) { }
+        public WaveSpawnDreadWolf(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -185,7 +185,7 @@ namespace Server.Items
             _bossPhase = true;
 
             Effects.PlaySound(Location, Map, 0x004);
-            AddMobile(typeof(Windrunner));
+            AddMobile(typeof(DreadWolf));
             StartCheckTimer();
         }
 
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

@@ -79,7 +79,7 @@ namespace Server.Items
             Name    = "Wave Spawn: Moldering Ursine";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
         public WaveSpawnMolderingUrsine(Serial serial) : base(serial) { }
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

@@ -8,17 +8,17 @@ using System;
 
 namespace Server.Mobiles
 {
-    [CorpseName("a skeletal cat corpse")]
-    public class SkeletalCat : BaseMount
+    [CorpseName("a bone cat corpse")]
+    public class BoneCat : BaseMount
     {
         [Constructable]
-        public SkeletalCat()
-            : this("Skeletal Cat")
+        public BoneCat()
+            : this("Bone Cat")
         {
         }
 
         [Constructable]
-        public SkeletalCat(string name)
+        public BoneCat(string name)
             : base(name, 1441, 16080, AIType.AI_Melee, FightMode.Closest, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0x69;
@@ -51,13 +51,12 @@ namespace Server.Mobiles
 
             Tamable = true;
             ControlSlots = 3;
-            ControlSlotsMax = 5;
             MinTameSkill = 108;
 
             SetSpecialAbility(SpecialAbility.DragonBreath);
         }
 
-        public SkeletalCat(Serial serial)
+        public BoneCat(Serial serial)
             : base(serial)
         {
         }
@@ -67,22 +66,7 @@ namespace Server.Mobiles
         public override int Hides { get { return 10; } }
         
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-                
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(SkeletalCat),
-                    Class.ClawedTailedAndNecromantic,
-                    MagicalAbility.Hellcat,
-                    PetTrainingHelper.SpecialAbilitySkeletalCat,
-                    PetTrainingHelper.WepAbility4,
-                    PetTrainingHelper.AreaEffectArea3,
-                    3, 5);
-            }
-        }
-
+              
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);

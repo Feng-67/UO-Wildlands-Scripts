@@ -21,12 +21,10 @@ namespace Server.Mobiles
 
             // --- Taming ---
             Tamable = true;
-            ControlSlots = 2;       // Spawns at 2 slots; trainable to 5
+            ControlSlots = 2;       
             MinTameSkill = 88.0;
 
-            // --- Pack Instinct & Food ---
-            //PackInstinct = PackInstinct.Equine;
-
+           
             // --- Attributes (fixed values per bestiary — zero spread) ---
             SetStr(460);
             SetDex(180);
@@ -57,36 +55,7 @@ namespace Server.Mobiles
             // --- Innate Special Ability ---
             SetSpecialAbility(SpecialAbility.Inferno);
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        //
-        // MagicalAbility.Triton = Chivalry | Discordance | MageryMastery |
-        //                         Mysticism | Poisoning | Spellweaving |
-        //                         Bushido | Ninjitsu | BattleDefense |
-        //                         Bashing | Piercing | Slashing | WrestlingMastery
-        //
-        // Special: inline { Inferno } — only one innate/trainable ability
-        //          (same pattern as DreadWarhorse's single DragonBreath entry)
-        //
-        // WepAbility2    = 16-move set including ColdWind and Dismount
-        // AreaEffectArea2 = all 6 area effects
-        // ------------------------------------------------------------------
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(FlameOfKindlehart),
-                    Class.Magical | Class.Tokuno,
-                    MagicalAbility.Triton,
-                    new SpecialAbility[] { SpecialAbility.Inferno },
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    2, 5);
-            }
-        }
-
+              
         public FlameOfKindlehart(Serial serial) : base(serial)
         {
         }

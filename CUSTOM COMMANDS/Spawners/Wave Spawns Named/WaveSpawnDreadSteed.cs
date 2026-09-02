@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Ancient Hellhound
+ * Wave Spawner: Dread Steed
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnAncientHellhound, then GM double-click to start.
- * 1-hour cooldown after Ancient Hellhound is tamed or killed.
+ * Place with [add WaveSpawnDreadSteed, then GM double-click to start.
+ * 1-hour cooldown after Dread Steed is tamed or is killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnAncientHellhound: Item
+    public class WaveSpawnDreadSteed : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(InterredGrizzle), 20)),
+                    (typeof(Drake), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(PlagueBeastLord), 5)),
+                    (typeof(Daemon), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,7 +53,7 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Daemon), 10)),
+                    (typeof(Dragon), 10)),
 
                 // Wave 5
                 BuildWave(
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnAncientHellhound() : base(0xED4)
+        public WaveSpawnDreadSteed() : base(0xED4)
         {
-            Name    = "Wave Spawn: Ancient Hellhound";
+            Name    = "Wave Spawn: Dread Steed";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
-        public WaveSpawnAncientHellhound(Serial serial) : base(serial) { }
+        public WaveSpawnDreadSteed(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x166);
-            Effects.PlaySound(Location, Map, 0x166);
+            Effects.PlaySound(Location, Map, 0x008);
+            Effects.PlaySound(Location, Map, 0x008);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x166);
-            AddMobile(typeof(AncientHellhound));
+            Effects.PlaySound(Location, Map, 0x008);
+            AddMobile(typeof(DreadSteed));
             StartCheckTimer();
         }
 
@@ -210,7 +210,7 @@ namespace Server.Items
                 int nextWave = _currentWave + 1;
                 if (nextWave >= Waves.Length)
                 {
-                    BroadcastLocal("ALL WAVES DEFEATED! A CREATURE APPROACHES...", 0x22);
+                    BroadcastLocal("ALL WAVES DEFEATED! A CRATURE APPROACHES...", 0x22);
 
                     // Lightning strikes over the next 6 seconds before the boss spawns
                     for (int i = 0; i < 6; i++)
@@ -249,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("CHIEF PAROXYSMUS HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("THE DREADHORN HAS BEEN SLAIN! THE FOREST IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Server.Mobiles
 
             // --- Taming ---
             Tamable = true;
-            ControlSlots = 3;       // Spawns at 3 slots; trainable to 5
+            ControlSlots = 3;       
             MinTameSkill = 108.0;
 
             // --- Attributes (fixed values — zero spread per bestiary) ---
@@ -69,42 +69,7 @@ namespace Server.Mobiles
             // Enforce the overcapped Wrestling cap post-spawn so it applies correctly
             Skills[SkillName.Wrestling].Cap = 130.0;
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        //
-        // Class.ClawedTailedMagicalAndTokuno = MagicalClawedAndTailed | Tokuno
-        //   → signals Clawed (GraspingClaw), Tailed (TailSwipe),
-        //     full magical schools, and Tokuno (Bushido + Ninjitsu)
-        //
-        // MagicalAbility.Triton = Chivalry | Discordance | MageryMastery |
-        //                         Mysticism | Poisoning | Spellweaving |
-        //                         Bushido | Ninjitsu | BattleDefense |
-        //                         Bashing | Piercing | Slashing | WrestlingMastery
-        //
-        // SpecialAbilityClawedTailedAndMagical2 (12-way exact match):
-        //   ManaDrain | Repel | SearingWounds | GraspingClaw | TailSwipe |
-        //   AngryFire | ConductiveBlast | DragonBreath | Inferno |
-        //   LightningForce | RagingBreath | StealLife
-        //
-        // WepAbility2     = full 16-move set including ColdWind and Dismount
-        // AreaEffectArea2 = all 6 area effects
-        // ------------------------------------------------------------------
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(JuvenileUmbrascale),
-                    Class.ClawedTailedMagicalAndTokuno,
-                    MagicalAbility.Triton,
-                    PetTrainingHelper.SpecialAbilityClawedTailedAndMagical2,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    3, 5);
-            }
-        }
-
+                
         public override bool CanAngerOnTame { get { return true; } }
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }

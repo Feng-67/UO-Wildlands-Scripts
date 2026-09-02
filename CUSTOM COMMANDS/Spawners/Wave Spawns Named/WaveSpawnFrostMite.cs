@@ -79,7 +79,7 @@ namespace Server.Items
             Name    = "Wave Spawn: Frost Mite Mount";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
         public WaveSpawnFrostMiteMount(Serial serial) : base(serial) { }
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

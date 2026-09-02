@@ -79,7 +79,7 @@ namespace Server.Items
             Name    = "Wave Spawn: Skeletal Horse";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
         public WaveSpawnSkeletalHorse(Serial serial) : base(serial) { }
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

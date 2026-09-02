@@ -53,32 +53,15 @@ namespace Server.Mobiles
 
             Tamable = true;
             ControlSlots = 3;
-            ControlSlotsMax = 5;
             MinTameSkill = 108;
-
-            this.SetMagicalAbility(MagicalAbility.Necromancy);
+                        
         }
 
         public BlackUnicorn(Serial serial)
             : base(serial)
         {
         }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(BlackUnicorn),
-                    Class.MagicalAndNecromantic,
-                    MagicalAbility.Necromage | MagicalAbility.Poisoning | MagicalAbility.Discordance | MagicalAbility.MageryMastery | MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
-                    PetTrainingHelper.SpecialAbilityNecroMagical,
-                    PetTrainingHelper.WepAbility11,
-                    PetTrainingHelper.AreaEffectArea2,
-                    3, 5);
-            }
-        }
-
+                
         // Immune to all poisons except Lethal
         public override Poison PoisonImmune { get { return Poison.Deadly; } }
 

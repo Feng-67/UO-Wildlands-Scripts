@@ -19,8 +19,7 @@ namespace Server.Mobiles
         {
             Name = "Shadow Spider";
             Body = 737;
-            //Hidden = true; 
-
+            
             SetStr(100, 104);
             SetDex(200, 220);
             SetInt(29, 50);
@@ -46,7 +45,6 @@ namespace Server.Mobiles
             SetSkill(SkillName.Hiding, 110.3, 119.9);
             SetSkill(SkillName.Stealth, 110.5, 119.6);
 
-
             Tamable = true;
             ControlSlots = 3;
             MinTameSkill = 108;
@@ -61,21 +59,7 @@ namespace Server.Mobiles
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(ShadowSpider),
-                    Class.None,
-                    MagicalAbility.Poisoning | MagicalAbility.Ninjitsu | MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
-                    PetTrainingHelper.SpecialAbilityDreadSpider,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea3,
-                    3, 5);
-            }
-        }
+                
                 
         public override void OnDamage(int amount, Mobile from, bool willKill)
         {

@@ -10,19 +10,19 @@ using Server.Items;
 
 namespace Server.Mobiles
 {
-    [CorpseName("an ancient hellhound corpse")]
-    public class AncientHellhound : BaseMount
+    [CorpseName("an dread hound corpse")]
+    public class DreadHound : BaseMount
     {
         public override double HealChance { get { return 1.0; } }
 
         [Constructable]
-        public AncientHellhound()
-            : this("Ancient Hellhound")
+        public DreadHound()
+            : this("Dread Hound")
         {
         }
 
         [Constructable]
-        public AncientHellhound(string name)
+        public DreadHound(string name)
             : base(name, 0x42D, 0x3EC9, AIType.AI_Melee, FightMode.Aggressor, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0xE5; // Grey Wolf sounds
@@ -55,13 +55,11 @@ namespace Server.Mobiles
 
             Tamable = true;
             ControlSlots = 3;
-            ControlSlotsMax = 5;
             MinTameSkill = 108;
-
-            SetWeaponAbility(WeaponAbility.MortalStrike);
+                        
         }
 
-        public AncientHellhound(Serial serial)
+        public DreadHound(Serial serial)
             : base(serial)
         {
         }
@@ -72,21 +70,7 @@ namespace Server.Mobiles
         public override int Hides { get { return 20; } }
         public override int Meat { get { return 16; } }
         public override HideType HideType { get { return HideType.Horned; } }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(AncientHellhound),
-                    Class.ClawedTailedNecromanticAndTokuno,
-                    MagicalAbility.Wolf | MagicalAbility.Poisoning | MagicalAbility.Discordance | MagicalAbility.Necromancy,
-                    PetTrainingHelper.SpecialAbilityClawedAndNecromantic,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    3, 5);
-            }
-        }
+                
                                 
         public override void OnAfterTame(Mobile tamer)
         {

@@ -46,30 +46,15 @@ namespace Server.Mobiles
 
             Tamable = true;
             ControlSlots = 3;
-            ControlSlotsMax = 5;
             MinTameSkill = 108;
         }
 
         public Capybara(Serial serial): base(serial)
         {
         }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(Capybara),
-                    Class.None,
-                    MagicalAbility.WrestlingMastery | MagicalAbility.Bushido,
-                    PetTrainingHelper.SpecialAbilityClawedAndNecromantic,
-                    PetTrainingHelper.WepAbility1,
-                    PetTrainingHelper.AreaEffectArea3,
-                    3, 5);
-            }
-        }
                 
-        public override FoodType FavoriteFood { get { return FoodType.Meat | FoodType.FruitsAndVegies | FoodType.Eggs; } }
+                
+        public override FoodType FavoriteFood { get { return FoodType.Meat; } }
         public override bool CanAngerOnTame { get { return true; } }
         public override bool StatLossAfterTame { get { return true; } }
         public override int Hides { get { return 20; } }

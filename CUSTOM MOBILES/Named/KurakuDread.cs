@@ -59,22 +59,7 @@ namespace Server.Mobiles
             SetWeaponAbility(WeaponAbility.ArmorIgnore);
             SetSpecialAbility(SpecialAbility.TailSwipe);
         }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(KurakuDread),
-                    Class.ClawedAndTailed,
-                    MagicalAbility.StandardClawedOrTailed,
-                    PetTrainingHelper.SpecialAbilityClawedAndTailed,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea1,
-                    3, 5);
-            }
-        }
-
+                
         public override bool AutoDispel { get { return !Controlled; } }
         public override Poison PoisonImmune { get { return Poison.Lethal; } }
         public override bool CanAngerOnTame { get { return true; } }

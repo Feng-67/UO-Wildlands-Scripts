@@ -51,7 +51,6 @@ namespace Server.Mobiles
 
             Tamable = true;
             ControlSlots = 3;
-            ControlSlotsMax = 5;
             MinTameSkill = 108;
         }
 
@@ -59,25 +58,10 @@ namespace Server.Mobiles
             : base(serial)
         {
         }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(RainbowUnicorn),
-                    Class.Magical,
-                    MagicalAbility.Chivalry | MagicalAbility.Discordance | MagicalAbility.MageryMastery | MagicalAbility.Mysticism | MagicalAbility.Spellweaving | MagicalAbility.Poisoning | MagicalAbility.Bashing | MagicalAbility.Piercing | MagicalAbility.Slashing | MagicalAbility.WrestlingMastery,
-                    PetTrainingHelper.SpecialAbilityUnicorn,
-                    PetTrainingHelper.WepAbility11,
-                    PetTrainingHelper.AreaEffectArea2,
-                    3, 5);
-            }
-        }
-
+                
         public override Poison PoisonImmune { get { return Poison.Lethal; } }
         public override bool CanAngerOnTame { get { return true; } }
-        public override FoodType FavoriteFood { get { return FoodType.FruitsAndVegies | FoodType.GrainsAndHay; } }
+        public override FoodType FavoriteFood { get { return FoodType.Meat; } }
         public override int Meat { get { return 3; } }
         
         public override void Serialize(GenericWriter writer)

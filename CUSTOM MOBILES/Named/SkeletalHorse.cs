@@ -25,20 +25,20 @@ namespace Server.Mobiles
         {
             // --- Taming ---
             Tamable = true;
-            ControlSlots = 3;       // Upgraded: Spawns at 3 slots; trainable to 5
-            MinTameSkill = 108.0;    // Upgraded: reflect 3-slot tier
+            ControlSlots = 3;      
+            MinTameSkill = 108.0;    
 
             // --- Attributes ---
-            SetStr(400, 500);       // Upgraded from 100
-            SetDex(100, 125);       // Upgraded from 80
-            SetInt(150, 250);       // Upgraded from 100 (Necromantic focus)
+            SetStr(400, 500);       
+            SetDex(100, 125);       
+            SetInt(150, 250);       
 
-            SetHits(450, 600);      // Upgraded from 100
+            SetHits(450, 600);      
             SetStam(100, 125);
             SetMana(150, 250);
 
             // --- Damage Profile ---
-            SetDamage(18, 24);      // Upgraded from 5-7
+            SetDamage(18, 24);      
 
             SetDamageType(ResistanceType.Physical, 20);
             SetDamageType(ResistanceType.Fire, 20);
@@ -66,24 +66,7 @@ namespace Server.Mobiles
             Fame = 12000;
             Karma = -12000;
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        // ------------------------------------------------------------------
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(SkeletalHorse),
-                    Class.MagicalAndNecromantic,
-                    MagicalAbility.GrizzledMare,
-                    PetTrainingHelper.SpecialAbilityGrizzledMare,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea4,
-                    3, 5); // Upgraded: Range set to 3 -> 5
-            }
-        }
+                
 
         public SkeletalHorse(Serial serial)
             : base(serial)

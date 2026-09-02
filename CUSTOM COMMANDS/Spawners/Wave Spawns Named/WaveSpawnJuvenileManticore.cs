@@ -79,7 +79,7 @@ namespace Server.Items
             Name    = "Wave Spawn: Juvenile Manticore";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
         public WaveSpawnJuvenileManticore(Serial serial) : base(serial) { }
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

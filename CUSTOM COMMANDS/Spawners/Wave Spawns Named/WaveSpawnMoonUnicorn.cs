@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Eowmu
+ * Wave Spawner: Moon Unicorn
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnEowmu, then GM double-click to start.
- * 1-hour cooldown after Eowmu is tamed or killed.
+ * Place with [add WaveSpawnMoonUnicorn, then GM double-click to start.
+ * 1-hour cooldown after Moon Unicorn is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnEowmu : Item
+    public class WaveSpawnMoonUnicorn : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnEowmu() : base(0xED4)
+        public WaveSpawnMoonUnicorn() : base(0xED4)
         {
-            Name    = "Wave Spawn: Eowmu";
+            Name    = "Wave Spawn: Moon Unicorn";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
-        public WaveSpawnEowmu(Serial serial) : base(serial) { }
+        public WaveSpawnMoonUnicorn(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -185,7 +185,7 @@ namespace Server.Items
             _bossPhase = true;
 
             Effects.PlaySound(Location, Map, 0x009);
-            AddMobile(typeof(Eowmu));
+            AddMobile(typeof(MoonUnicorn));
             StartCheckTimer();
         }
 
@@ -378,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

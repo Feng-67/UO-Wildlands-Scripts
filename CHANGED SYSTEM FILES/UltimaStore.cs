@@ -389,9 +389,9 @@ namespace Server.Engines.UOStore
             Register<EtherealSerpentineDragon>(1157995, 0, 0xA010, 0, 0, 200, cat);
             Register<EtherealWarBoar>(1159423, 0, 0xA554, 0, 0, 200, cat);
             Register<EtherealAncientHellHound>(1155723, 0, 0x3FFD, 0, 0, 200, cat);
-            //Register<SkeletalCatStatue>(1158462, 1158738, 0xA138, 0, 0, 200, cat);
-            //Register<EowmuStatue>(1158082, 1158433, 0xA0C0, 0, 0, 1000, cat);
-            //Register<WindrunnerStatue>(1124685, 1157373, 0x9ED5, 0, 0, 1000, cat);
+            Register<SkeletalCatStatue>(1158462, 1158738, 0xA138, 0, 0, 1000, cat);
+            Register<EowmuStatue>(1158082, 1158433, 0xA0C0, 0, 0, 1000, cat);
+            Register<WindrunnerStatue>(1124685, 1157373, 0x9ED5, 0, 0, 1000, cat);
             
             Register<AlaskanMalamuteStatue>("Alaskan Malmute", 0, 0xA76C, 0, 0, 20000, cat);
             Register<GreatDaneStatue>("Great Dane", 0, 0xA76D, 1117, 0, 20000, cat);

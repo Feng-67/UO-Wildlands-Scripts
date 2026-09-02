@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Dread Warhorse
+ * Wave Spawner: Bone Cat
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnDreadWarhorse, then GM double-click to start.
- * 1-hour cooldown after Dread Warhorse is tamed or is killed.
+ * Place with [add WaveSpawnBoneCat, then GM double-click to start.
+ * 1-hour cooldown after Bone Cat is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnDreadWarhorse : Item
+    public class WaveSpawnBoneCat : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(Drake), 20)),
+                    (typeof(GoreFiend), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(Daemon), 5)),
+                    (typeof(RottingCorpse), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Dragon), 10)),
+                    (typeof(SkeletalLich), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Balron), 10))
+                    (typeof(RedDeath), 10))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnDreadWarhorse() : base(0xED4)
+        public WaveSpawnBoneCat() : base(0xED4)
         {
-            Name    = "Wave Spawn: Dread Warhorse";
+            Name    = "Wave Spawn: Bone Cat";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
-        public WaveSpawnDreadWarhorse(Serial serial) : base(serial) { }
+        public WaveSpawnBoneCat(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x008);
-            Effects.PlaySound(Location, Map, 0x008);
+            Effects.PlaySound(Location, Map, 0x100);
+            Effects.PlaySound(Location, Map, 0x100);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x008);
-            AddMobile(typeof(DreadWarhorse));
+            Effects.PlaySound(Location, Map, 0x100);
+            AddMobile(typeof(BoneCat));
             StartCheckTimer();
         }
 
@@ -220,7 +220,9 @@ namespace Server.Items
                         {
                             int x = X + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
                             int y = Y + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
-                            int z = Map.GetAverageZ(x, y);
+
+                            // Replaced Map.GetAverageZ(x, y)
+                            int z = this.Z;
                             Point3D strikeLocation = new Point3D(x, y, z);
 
                             EffectMobile em = EffectMobile.Create(strikeLocation, Map, EffectMobile.DefaultDuration);
@@ -249,7 +251,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE DREADHORN HAS BEEN SLAIN! THE FOREST IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("THE MONSTROUS INTERRED GRIZZLE HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }
@@ -309,7 +311,9 @@ namespace Server.Items
             {
                 int x = X + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
                 int y = Y + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
-                int z = Map.GetAverageZ(x, y);
+
+                // Replaced Map.GetAverageZ(x, y)
+                int z = this.Z;
 
                 if (Map.CanSpawnMobile(x, y, z))
                     return new Point3D(x, y, z);
@@ -378,7 +382,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

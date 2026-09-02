@@ -52,47 +52,17 @@ namespace Server.Mobiles
             ControlSlots = 3;
             MinTameSkill = 108.0;
         }
-
-        public bool AuraActive { get { return true; } }
-        public int AuraRange { get { return 3; } }
-        public TimeSpan AuraInterval { get { return TimeSpan.FromSeconds(2.0); } }
-
-        public void OnAuraEffect(Mobile m)
-        {
-            int damage = 10;
-            m.Damage(damage, this);
-            m.FixedParticles(0x376A, 1, 32, 0x1531, EffectLayer.Waist);
-            m.PlaySound(0x5C6);
-            m.SendLocalizedMessage(1008111, false, Name); // The intense cold is damaging you!
-        }
+               
 
         public FrostMiteMount(Serial serial) : base(serial)
         {
         }
 
-        //public override bool CanAngerOnTame { get { return true; } }
+        public override bool CanAngerOnTame { get { return true; } }
+        public override bool StatLossAfterTame { get { return true; } }
         public override int Meat { get { return 3; } }
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }
-
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(FrostMiteMount),
-                    Class.ClawedTailedNecromanticAndTokuno,
-                    MagicalAbility.Poisoning,
-                    new SpecialAbility[]
-                    {
-                SpecialAbility.ManaDrain, SpecialAbility.Repel, SpecialAbility.RuneCorruption,
-                SpecialAbility.SearingWounds, SpecialAbility.VenomousBite, SpecialAbility.ViciousBite
-                    },
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea3,
-                    3, 5);
-            }
-        }
-
+        
         public override void Serialize(GenericWriter writer)
         {
             base.Serialize(writer);
@@ -106,7 +76,7 @@ namespace Server.Mobiles
 
             if (version > 0)
             {
-                reader.ReadBool(); // Consume the old isExotic bool if loading an old save
+                reader.ReadBool();
             }
         }
     }

@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Skeletal Cat
+ * Wave Spawner: Dread Hound
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnSkeletalCat, then GM double-click to start.
- * 1-hour cooldown after Skeletal Cat is tamed or killed.
+ * Place with [add WaveSpawnDreadHound, then GM double-click to start.
+ * 1-hour cooldown after Dread Hound is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnSkeletalCat : Item
+    public class WaveSpawnDreadHound: Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -41,11 +41,11 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(GoreFiend), 20)),
+                    (typeof(InterredGrizzle), 20)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(RottingCorpse), 5)),
+                    (typeof(PlagueBeastLord), 5)),
 
                 // Wave 3
                 BuildWave(
@@ -53,11 +53,11 @@ namespace Server.Items
 
                 // Wave 4
                 BuildWave(
-                    (typeof(SkeletalLich), 10)),
+                    (typeof(Daemon), 10)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(RedDeath), 10))
+                    (typeof(Balron), 10))
             };
         }
 
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnSkeletalCat() : base(0xED4)
+        public WaveSpawnDreadHound() : base(0xED4)
         {
-            Name    = "Wave Spawn: Skeletal Cat";
+            Name    = "Wave Spawn: Dread Hound";
             Movable = false;
             Visible = false;
-            StartProximityTimer();
+            //StartProximityTimer();
         }
 
-        public WaveSpawnSkeletalCat(Serial serial) : base(serial) { }
+        public WaveSpawnDreadHound(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -170,8 +170,8 @@ namespace Server.Items
         {
             _currentWave = waveIndex;
 
-            Effects.PlaySound(Location, Map, 0x100);
-            Effects.PlaySound(Location, Map, 0x100);
+            Effects.PlaySound(Location, Map, 0x166);
+            Effects.PlaySound(Location, Map, 0x166);
             BroadcastLocal("YOU FEEL A CHILL IN THE AIR...", 0x22);
 
             foreach (Type t in Waves[waveIndex])
@@ -184,8 +184,8 @@ namespace Server.Items
         {
             _bossPhase = true;
 
-            Effects.PlaySound(Location, Map, 0x100);
-            AddMobile(typeof(SkeletalCat));
+            Effects.PlaySound(Location, Map, 0x166);
+            AddMobile(typeof(DreadHound));
             StartCheckTimer();
         }
 
@@ -210,7 +210,7 @@ namespace Server.Items
                 int nextWave = _currentWave + 1;
                 if (nextWave >= Waves.Length)
                 {
-                    BroadcastLocal("ALL WAVES DEFEATED! A CRATURE APPROACHES...", 0x22);
+                    BroadcastLocal("ALL WAVES DEFEATED! A CREATURE APPROACHES...", 0x22);
 
                     // Lightning strikes over the next 6 seconds before the boss spawns
                     for (int i = 0; i < 6; i++)
@@ -220,9 +220,7 @@ namespace Server.Items
                         {
                             int x = X + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
                             int y = Y + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
-
-                            // Replaced Map.GetAverageZ(x, y)
-                            int z = this.Z;
+                            int z = Map.GetAverageZ(x, y);
                             Point3D strikeLocation = new Point3D(x, y, z);
 
                             EffectMobile em = EffectMobile.Create(strikeLocation, Map, EffectMobile.DefaultDuration);
@@ -251,7 +249,7 @@ namespace Server.Items
             _spawned.Clear();
 
             //Effects.PlaySound(Location, Map, 0x207);
-            //BroadcastLocal("THE MONSTROUS INTERRED GRIZZLE HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
+            //BroadcastLocal("CHIEF PAROXYSMUS HAS BEEN SLAIN! SOSARIA IS SAFE... FOR NOW. ", 0x22);
 
             InvalidateProperties();
         }
@@ -311,9 +309,7 @@ namespace Server.Items
             {
                 int x = X + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
                 int y = Y + Utility.RandomMinMax(-SpawnRadius, SpawnRadius);
-
-                // Replaced Map.GetAverageZ(x, y)
-                int z = this.Z;
+                int z = Map.GetAverageZ(x, y);
 
                 if (Map.CanSpawnMobile(x, y, z))
                     return new Point3D(x, y, z);
@@ -382,7 +378,7 @@ namespace Server.Items
             if (_active)
                 StartCheckTimer();
 
-            StartProximityTimer();
+            //StartProximityTimer();
         }
     }
 }

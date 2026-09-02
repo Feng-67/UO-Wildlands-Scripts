@@ -50,58 +50,10 @@ namespace Server.Mobiles
 
             // --- Taming ---
             Tamable = true;
-            ControlSlots = 2;       // Spawns at 2 slots; trainable to 5
+            ControlSlots = 2;       
             MinTameSkill = 88.0;
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        //
-        // MagicalAbility.Triton = Chivalry | Discordance | MageryMastery |
-        //                         Mysticism | Poisoning | Spellweaving |
-        //                         Bushido | Ninjitsu | BattleDefense |
-        //                         Bashing | Piercing | Slashing | WrestlingMastery
-        //
-        // Special Abilities (inline — no PetTrainingHelper preset matches this
-        // exact 12-item list; closest is SpecialAbilityTriton, which adds
-        // StealLife and VenomousBite that aren't on the Spritelight Forager's
-        // actual training sheet):
-        // AngryFire | ConductiveBlast | DragonBreath | Inferno |
-        // LightningForce | ManaDrain | RagingBreath | Repel |
-        // SearingWounds | StickySkin | TailSwipe | ViciousBite
-        //
-        // WepAbility2    = 16-move set including ColdWind and Dismount
-        // AreaEffectArea2 = all 6 area effects
-        // ------------------------------------------------------------------
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(SpritelightForager),
-                    Class.Magical | Class.Tokuno,
-                    MagicalAbility.Triton | MagicalAbility.Bushido | MagicalAbility.Ninjitsu,
-                    new SpecialAbility[]
-                    {
-                        SpecialAbility.AngryFire,
-                        SpecialAbility.ConductiveBlast,
-                        SpecialAbility.DragonBreath,
-                        SpecialAbility.Inferno,
-                        SpecialAbility.LightningForce,
-                        SpecialAbility.ManaDrain,
-                        SpecialAbility.RagingBreath,
-                        SpecialAbility.Repel,
-                        SpecialAbility.SearingWounds,
-                        SpecialAbility.StickySkin,
-                        SpecialAbility.TailSwipe,
-                        SpecialAbility.ViciousBite
-                    },
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea2,
-                    2, 5);
-            }
-        }
-
+                
         public SpritelightForager(Serial serial) : base(serial)
         {
         }

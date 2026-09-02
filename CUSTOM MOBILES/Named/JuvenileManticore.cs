@@ -66,7 +66,7 @@ namespace Server.Mobiles
 
             // --- Taming ---
             Tamable = true;
-            ControlSlots = 3;       // Spawns at 3 slots; trainable to 5
+            ControlSlots = 3;      
             MinTameSkill = 108.0;
 
             // --- Attributes ---
@@ -94,54 +94,9 @@ namespace Server.Mobiles
             SetSkill(SkillName.Tactics,     100.1, 115.0);
             SetSkill(SkillName.MagicResist,  80.0, 100.0);
             SetSkill(SkillName.Anatomy,      50.0,  70.0);
-
-            // --- Tail Spike (Special Information) ---
-            // The Juvenile Manticore has a Tail Spike attack not shown on the
-            // lore page: a frontal cone that deals AoE damage and applies bleed.
-            // BleedAttack covers the bleed component. The full frontal-cone AoE
-            // behaviour requires a custom OnActionCombat/OnGaveMeleeAttack override
-            // if you want to replicate it precisely on your shard.
-            SetWeaponAbility(WeaponAbility.BleedAttack);
+                        
         }
-
-        // ------------------------------------------------------------------
-        // Pet Training Profile
-        //
-        // NOTE: The Juvenile Manticore is a New Legacy shard pet. The uo-cah.com
-        // bestiary does NOT publish a training options table for it. The profile
-        // below is INFERRED from creature anatomy (Clawed lion body + Tailed
-        // scorpion appendage) and should be reviewed/adjusted once official
-        // training data becomes available for your shard implementation.
-        //
-        // Class.ClawedAndTailed → signals GraspingClaw and TailSwipe access
-        //
-        // MagicalAbility.StandardClawedOrTailed:
-        //   Bashing | Piercing | Poisoning | Slashing | WrestlingMastery
-        //
-        // SpecialAbilityClawedAndTailed:
-        //   ManaDrain | Repel | SearingWounds | GraspingClaw | TailSwipe
-        //
-        // WepAbility2 = full 16-move set including ColdWind, Dismount,
-        //               and BleedAttack (matching the innate Tail Spike bleed)
-        //
-        // AreaEffectArea3 = AuraOfNausea | EssenceOfDisease | PoisonBreath
-        //   (poison/venom theme appropriate for a manticore)
-        // ------------------------------------------------------------------
-        public override TrainingDefinition TrainingDefinition
-        {
-            get
-            {
-                return new TrainingDefinition(
-                    typeof(JuvenileManticore),
-                    Class.ClawedAndTailed,
-                    MagicalAbility.StandardClawedOrTailed,
-                    PetTrainingHelper.SpecialAbilityClawedAndTailed,
-                    PetTrainingHelper.WepAbility2,
-                    PetTrainingHelper.AreaEffectArea3,
-                    3, 5);
-            }
-        }
-
+                
         public override bool CanAngerOnTame { get { return true; } }
         public override int Meat { get { return 3; } }
         public override int Hides { get { return 10; } }

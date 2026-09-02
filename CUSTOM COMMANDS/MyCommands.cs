@@ -38,8 +38,8 @@ namespace Server.Gumps
         private readonly List<string> m_AllCommands = new List<string>
 {
     // Admin Commands
-    "props", "dupe", "townhouses", "delete", "kill", "add", "tele", "skills",
-    "set movable false", "set movable true", "move", "admin", "save", "unhide",
+    "props", "dupe", "area remove", "delete", "unhide", "kill", "add", "tele", "skills",
+    "set movable false", "set movable true", "move", "admin", "save", "townhouses", 
     "addsovs 1000", "addsovs -1000", "AdminBank 2000000000", "AdminBank -2000000000",
     
     // Player Commands

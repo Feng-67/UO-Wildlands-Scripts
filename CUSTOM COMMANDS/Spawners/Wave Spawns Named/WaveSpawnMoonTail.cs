@@ -3,10 +3,10 @@
  * Compiled & Modified by: [Feng / UO Wildlands Team]
  * Licensed under the GNU General Public License v3.0 (GPL-3.0)
  *
- * Wave Spawner: Moon Unicorn
+ * Wave Spawner: Moon Tail
  * Four waves centred on the spawner item within a 10-tile radius.
- * Place with [add WaveSpawnMoonUnicorn, then GM double-click to start.
- * 1-hour cooldown after Moon Unicorn is tamed or killed.
+ * Place with [add WaveSpawnMoonTail, then GM double-click to start.
+ * 1-hour cooldown after Moon Tail is tamed or killed.
  */
 
 using System;
@@ -17,7 +17,7 @@ using Server.Network;
 
 namespace Server.Items
 {
-    public class WaveSpawnMoonUnicorn : Item
+    public class WaveSpawnMoonTail : Item
     {
         // Spawn radius in tiles around this item
         private const int SpawnRadius = 10;
@@ -74,15 +74,15 @@ namespace Server.Items
         // Construction
         // ---------------------------------------------------------------
         [Constructable]
-        public WaveSpawnMoonUnicorn() : base(0xED4)
+        public WaveSpawnMoonTail() : base(0xED4)
         {
-            Name    = "Wave Spawn: Moon Unicorn";
+            Name    = "Wave Spawn: Moon Tail";
             Movable = false;
             Visible = false;
             //StartProximityTimer();
         }
 
-        public WaveSpawnMoonUnicorn(Serial serial) : base(serial) { }
+        public WaveSpawnMoonTail(Serial serial) : base(serial) { }
 
 
         /// ---------------------------------------------------------------
@@ -185,7 +185,7 @@ namespace Server.Items
             _bossPhase = true;
 
             Effects.PlaySound(Location, Map, 0x009);
-            AddMobile(typeof(MoonUnicorn));
+            AddMobile(typeof(MoonTail));
             StartCheckTimer();
         }
 

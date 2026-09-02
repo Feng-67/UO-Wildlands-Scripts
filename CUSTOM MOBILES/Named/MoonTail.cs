@@ -8,17 +8,17 @@ using System;
 
 namespace Server.Mobiles
 {
-    [CorpseName("an moon unicorn corpse")]
-    public class MoonUnicorn : BaseMount
+    [CorpseName("an moon tail corpse")]
+    public class MoonTail : BaseMount
     {
         [Constructable]
-        public MoonUnicorn()
-            : this("MoonUnicorn")
+        public MoonTail()
+            : this("Moon Tail")
         {
         }
 
         [Constructable]
-        public MoonUnicorn(string name)
+        public MoonTail(string name)
             : base(name, 1440, 16079, AIType.AI_Mage, FightMode.Aggressor, 10, 1, 0.2, 0.4)
         {
             BaseSoundID = 0x270;
@@ -57,7 +57,7 @@ namespace Server.Mobiles
          
         }
 
-        public MoonUnicorn(Serial serial)
+        public MoonTail(Serial serial)
             : base(serial)
         {
         }

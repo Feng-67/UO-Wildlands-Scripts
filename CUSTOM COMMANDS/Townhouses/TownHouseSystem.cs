@@ -19,6 +19,7 @@ namespace Server.Custom.TownHouses
         public static bool UseAccountOwnership = false;
         public static int HighlightStep = 2;
         public static TimeSpan HighlightDuration = TimeSpan.FromSeconds(30);
+        public static int MaxOwnedHouses = 3;   // new
     }
 
     /// <summary>
@@ -33,7 +34,30 @@ namespace Server.Custom.TownHouses
         public static Action<TownHouseController, Mobile> OnPurchased;
         public static Action<TownHouseController> OnEvicted;
 
-public static void Initialize()
+        public static int GetOwnedCount(Mobile m)
+        {
+            if (m == null) return 0;
+            int count = 0;
+            bool useAccount = TownHouseConfig.UseAccountOwnership;
+            foreach (TownHouseController c in _houses)
+            {
+                if (c == null || c.Deleted) continue;
+                if (c.Owner == null) continue;
+                if (useAccount)
+                {
+                    if (c.Owner.Account != null && m.Account != null && c.Owner.Account == m.Account)
+                        count++;
+                }
+                else
+                {
+                    if (c.Owner == m)
+                        count++;
+                }
+            }
+            return count;
+        }
+
+        public static void Initialize()
 {
     EventSink.WorldLoad += new WorldLoadEventHandler(OnWorldLoad);
     CommandSystem.Register("TownHouses", AccessLevel.GameMaster, new CommandEventHandler(TownHouses_OnCommand));

@@ -43,7 +43,7 @@ namespace Server.Gumps
     "addsovs 1000", "addsovs -1000", "AdminBank 2000000000", "AdminBank -2000000000",
     
     // Player Commands
-    "wallet", "mystats", "chathistory", "chattoggle", "where", "emote", "gethue", "time"
+    "wallet", "mystats", "chathistory", "chattoggle", "myhouses", "where", "emote", "gethue", "time"
 };
 
         public MyCommandsGump(Mobile from) : base(50, 50)

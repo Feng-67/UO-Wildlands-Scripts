@@ -628,6 +628,13 @@ namespace Server.Custom.TownHouses
                 return false;
             }
 
+            // --- NEW CAP CHECK ---
+            if (TownHouseSystem.GetOwnedCount(buyer) >= TownHouseConfig.MaxOwnedHouses)
+            {
+                buyer.SendMessage("You already own the maximum number of town houses (3).");
+                return false;
+            }
+
             if (!Banker.Withdraw(buyer, PurchasePrice))
             {
                 buyer.SendMessage("You do not have enough gold in the bank.");
@@ -878,6 +885,13 @@ namespace Server.Custom.TownHouses
                 return false;
             }
 
+            // --- NEW CAP CHECK ---
+            if (TownHouseSystem.GetOwnedCount(to) >= TownHouseConfig.MaxOwnedHouses)
+            {
+                from.SendMessage("That player already owns the maximum number of town houses (3).");
+                return false;
+            }
+
             Owner = to;
             CoOwners.Clear();
             Friends.Clear();
@@ -953,6 +967,13 @@ namespace Server.Custom.TownHouses
 
             if (IsOwner(buyer)) {
                 buyer.SendMessage("You already own this town house.");
+                return false;
+            }
+
+            // --- NEW CAP CHECK ---
+            if (TownHouseSystem.GetOwnedCount(buyer) >= TownHouseConfig.MaxOwnedHouses)
+            {
+                buyer.SendMessage("You already own the maximum number of town houses (3).");
                 return false;
             }
 

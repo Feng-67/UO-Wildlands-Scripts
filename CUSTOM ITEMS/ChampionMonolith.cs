@@ -205,9 +205,14 @@ namespace Server.Items
                         from.SendMessage(33, "Warning: Precision coordinates not found. Using approximate location.");
                     }
 
+                    // --- Teleport pets FIRST (while player is still at the old location) ---
+                    BaseCreature.TeleportPets(from, destination, map);
+
+                    // --- Move the player AFTER pets are relocated ---
                     from.MoveToWorld(destination, map);
+
                     from.SendMessage(0x22, "You travel to the {0} region.", name ?? "Champion");
-                    from.PlaySound(0x1FE); 
+                    from.PlaySound(0x1FE);
                 }
             }
         }

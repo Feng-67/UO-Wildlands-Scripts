@@ -133,7 +133,7 @@ namespace Server.Engines.UOStore
 
             Register<TransmogPotion>(1159501, 1159501, 0x0EFF, 0, 1150, 100, cat);
             Register<PetBondingPotion>(1152921, 1156678, 0, 0x9CBC, 0, 175, cat);
-            Register<ElixirOfRebirth>(1112762, 1112762, 0x24E2, 0x48E, 1112762, 10, cat);
+            Register<ElixirOfRebirth>(1112762, 1112762, 0x24E2, 0x48E, 1112762, 25, cat);
             Register<PetLeash>("Pet Leash", 0, 0x1374, 1153, 1153, 200, cat);
             Register(typeof(ScrollOfDecurse), "Scroll of Decurse", 0, 0xA1E4, 1266, 0, 500, cat);
             Register(typeof(ScrollOfAntiqueToPrized), "Scroll of Antique to Prized", 0, 0xA1E4, 1638, 0, 750, cat);
@@ -162,6 +162,7 @@ namespace Server.Engines.UOStore
             Register<RefinementCabinet>("Refinement Cabinet", 0, 0xB2E7, 0, 0, 250, cat);
 
             Register<DavyJonesPoker>("Davy Jones' Iron Poker", 1041088, 0xF62, 2122, 1315, 50, cat);
+            Register<ManaDraught>("Mana Draught", 1094938, 0xFFB, 0x48A, 0, 250, cat);
             Register<BreakParalysisPotion>("Break Paralysis Potion", 0, 0xF09, 2543, 0, 5, cat);
             Register<HangoverCure>("Hag's Hangover Cure", 0, 0xE2B, 0x2D, 0, 100, cat);
             Register<PowderOfTemperament>("Powder of Fortification", 0, 4102, 2419, 0, 35, cat);

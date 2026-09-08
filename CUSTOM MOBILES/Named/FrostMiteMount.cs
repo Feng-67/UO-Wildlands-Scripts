@@ -58,6 +58,85 @@ namespace Server.Mobiles
         {
         }
 
+        public override TrainingDefinition TrainingDefinition
+        {
+            get
+            {
+                return new TrainingDefinition(typeof(FrostMiteMount), Class.None,
+                (
+                    // Magical Schools
+                    //MagicalAbility.Chivalry |
+                    //MagicalAbility.Discordance |
+                    //MagicalAbility.MageryMastery |
+                    //MagicalAbility.Mysticism |
+                    //MagicalAbility.Necromage |
+                    //MagicalAbility.Necromancy |
+                    MagicalAbility.Poisoning |
+                    //MagicalAbility.Spellweaving |
+                    //Tokuno
+                    //MagicalAbility.Bushido |
+                    //MagicalAbility.Ninjitsu |
+                    //Melee
+                    //MagicalAbility.Bashing |
+                    //MagicalAbility.BattleDefense |
+                    //MagicalAbility.Piercing |
+                    //MagicalAbility.Slashing |
+                    MagicalAbility.WrestlingMastery
+                ),
+                new SpecialAbility[]
+                {
+                    //SpecialAbility.AngryFire,
+                    //SpecialAbility.ConductiveBlast,
+                    //SpecialAbility.DragonBreath,
+                    //SpecialAbility.GraspingClaw,
+                    //SpecialAbility.Inferno,
+                    //SpecialAbility.LifeLeech,
+                    //SpecialAbility.LightningForce,
+                    SpecialAbility.ManaDrain,
+                    //SpecialAbility.RagingBreath,
+                    SpecialAbility.Repel,
+                    SpecialAbility.RuneCorruption,
+                    SpecialAbility.SearingWounds,
+                    //SpecialAbility.StealLife,
+                    //SpecialAbility.StickySkin,
+                    //SpecialAbility.TailSwipe,
+                    SpecialAbility.VenomousBite,
+                    SpecialAbility.ViciousBite,
+                },
+                new WeaponAbility[]
+                {
+                    WeaponAbility.ArmorIgnore,
+                    WeaponAbility.ArmorPierce,
+                    WeaponAbility.Bladeweave,
+                    WeaponAbility.BleedAttack,
+                    WeaponAbility.Block,
+                    WeaponAbility.ColdWind,
+                    WeaponAbility.ConcussionBlow,
+                    WeaponAbility.CrushingBlow,
+                    WeaponAbility.Disarm,
+                    WeaponAbility.Dismount,
+                    WeaponAbility.Feint,
+                    WeaponAbility.ForceOfNature,
+                    WeaponAbility.FrenziedWhirlwind,
+                    WeaponAbility.MortalStrike,
+                    WeaponAbility.NerveStrike,
+                    WeaponAbility.ParalyzingBlow,
+                    WeaponAbility.PsychicAttack,
+                    WeaponAbility.TalonStrike,
+                },
+                new AreaEffect[]
+                {
+                    //AreaEffect.AuraOfEnergy,
+                    //AreaEffect.ExplosiveGoo,
+                    //AreaEffect.EssenceOfEarth,
+                    AreaEffect.AuraOfNausea,
+                    AreaEffect.PoisonBreath,
+                    AreaEffect.EssenceOfDisease,
+                },
+                3, 5);
+            }
+        }
+
         public override bool CanAngerOnTame { get { return true; } }
         public override bool StatLossAfterTame { get { return true; } }
         public override int Meat { get { return 3; } }

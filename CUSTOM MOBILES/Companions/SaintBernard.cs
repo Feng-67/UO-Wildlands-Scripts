@@ -56,6 +56,7 @@ namespace Server.Mobiles
             SetSkill(SkillName.MagicResist, 59.3, 69.0);
             SetSkill(SkillName.Anatomy, 55.5, 70.4);
             SetSkill(SkillName.Healing, 72.2, 98.9);
+            SetSkill(SkillName.Discordance, 72.2, 98.9);
 
             Fame = 24000;
             Karma = -24000;
@@ -70,6 +71,85 @@ namespace Server.Mobiles
         public SaintBernard(Serial serial)
             : base(serial)
         {
+        }
+
+        public override TrainingDefinition TrainingDefinition
+        {
+            get
+            {
+                return new TrainingDefinition(typeof(SaintBernard), Class.None,
+                (
+                    // Magical Schools
+                    MagicalAbility.Chivalry |
+                    //MagicalAbility.Discordance |
+                    MagicalAbility.MageryMastery |
+                    MagicalAbility.Mysticism |
+                    MagicalAbility.Necromage |
+                    MagicalAbility.Necromancy |
+                    MagicalAbility.Poisoning |
+                    MagicalAbility.Spellweaving |
+                    //Tokuno
+                    MagicalAbility.Bushido |
+                    MagicalAbility.Ninjitsu |
+                    //Melee
+                    //MagicalAbility.Bashing |
+                    //MagicalAbility.BattleDefense |
+                    //MagicalAbility.Piercing |
+                    //MagicalAbility.Slashing |
+                    MagicalAbility.WrestlingMastery
+                ),
+                new SpecialAbility[]
+                {
+                    SpecialAbility.AngryFire,
+                    SpecialAbility.ConductiveBlast,
+                    SpecialAbility.DragonBreath,
+                    SpecialAbility.GraspingClaw,
+                    SpecialAbility.Inferno,
+                    SpecialAbility.LifeLeech,
+                    SpecialAbility.LightningForce,
+                    SpecialAbility.ManaDrain,
+                    SpecialAbility.RagingBreath,
+                    SpecialAbility.Repel,
+                    //SpecialAbility.RuneCorruption,
+                    SpecialAbility.SearingWounds,
+                    SpecialAbility.StealLife,
+                    //SpecialAbility.StickySkin,
+                    //SpecialAbility.TailSwipe,
+                    SpecialAbility.VenomousBite,
+                    SpecialAbility.ViciousBite,
+                },
+                new WeaponAbility[]
+                {
+                    WeaponAbility.ArmorIgnore,
+                    WeaponAbility.ArmorPierce,
+                    WeaponAbility.Bladeweave,
+                    WeaponAbility.BleedAttack,
+                    WeaponAbility.Block,
+                    WeaponAbility.ColdWind,
+                    WeaponAbility.ConcussionBlow,
+                    WeaponAbility.CrushingBlow,
+                    WeaponAbility.Disarm,
+                    WeaponAbility.Dismount,
+                    WeaponAbility.Feint,
+                    WeaponAbility.ForceOfNature,
+                    WeaponAbility.FrenziedWhirlwind,
+                    WeaponAbility.MortalStrike,
+                    WeaponAbility.NerveStrike,
+                    WeaponAbility.ParalyzingBlow,
+                    WeaponAbility.PsychicAttack,
+                    WeaponAbility.TalonStrike,
+                },
+                new AreaEffect[]
+                {
+                    AreaEffect.AuraOfEnergy,
+                    AreaEffect.ExplosiveGoo,
+                    AreaEffect.EssenceOfEarth,
+                    AreaEffect.AuraOfNausea,
+                    AreaEffect.PoisonBreath,
+                    AreaEffect.EssenceOfDisease,
+                },
+                3, 5);
+            }
         }
 
         public override FoodType FavoriteFood { get { return FoodType.Meat; } }

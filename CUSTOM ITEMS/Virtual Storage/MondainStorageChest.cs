@@ -31,7 +31,8 @@ namespace Server.Items
 
                     // Peerless Reagents
                     typeof(Corruption), typeof(Taint), typeof(Blight), typeof(Putrefaction),
-                    typeof(Muculent), typeof(Scourge), typeof(DaemonBone), typeof(DiseasedBark)
+                    typeof(Muculent), typeof(Scourge), typeof(DaemonBone), typeof(DiseasedBark),
+                    typeof(BloodOfTheDarkFather)
                 };
             }
         }

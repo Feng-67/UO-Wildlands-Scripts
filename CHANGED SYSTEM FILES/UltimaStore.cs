@@ -148,6 +148,7 @@ namespace Server.Engines.UOStore
             Register<PowerScrollBook>("Power Scroll Book", 1155684, 0x9A95, 1153, 1153, 500, cat);
             Register<MarkRuneStone>("Mark Rune", 0, 0x1F14, 0x481, 0, 100, cat);
             Register<LargeBODBox>("Large BOD Deed Box", 0, 0x9AA, 0, 0, 200, cat);
+            Register<WeaponStrap>("Weapon Strap", 0, 0x2B02, 0, 0x497, 250, cat);
 
             Register<ReagentStorageChest>("Reagent Storage Chest", 0, 0xE7C, 0, 0, 250, cat);
             Register<ScrollStorageChest>("Scroll Storage Chest", 0, 0xE7C, 0, 0, 250, cat);

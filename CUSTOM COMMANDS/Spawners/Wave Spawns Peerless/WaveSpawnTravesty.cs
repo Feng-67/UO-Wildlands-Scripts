@@ -41,7 +41,7 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(Ninja), 20)),
+                    (typeof(EliteNinja), 20)),
 
                 // Wave 2
                 BuildWave(

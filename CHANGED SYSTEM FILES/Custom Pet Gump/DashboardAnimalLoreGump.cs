@@ -288,7 +288,6 @@ namespace Server.Mobiles
             // MISCELLANEOUS
             // ------------------------------------------------------------------------
             int miscY = regenY + 130;
-            //    DrawDivider(20, miscY - 5, (width / 2) - 40); 
             AddHtml(c1X, miscY, 250, 18, "<CENTER><BASEFONT COLOR=#FFD700>Miscellaneous</BASEFONT></CENTER>", false, false);
 
             AddLabel(c1X, miscY + 25, C_WHITE, "Loyalty Rating");
@@ -306,10 +305,34 @@ namespace Server.Mobiles
             AddLabel(c1X, miscY + 105, C_WHITE, "Pet Slots");
             AddLabel(c1X + 140, miscY + 105, C_WHITE, m_Creature.ControlSlots + " => " + m_Creature.ControlSlotsMax + " (Req. " + m_Creature.MinTameSkill.ToString("F1") + ")");
 
+            // Slayer vulnerabilities — appended to Miscellaneous
+            List<string> superSlayers, lesserSlayers;
+            GetSlayerInfo(m_Creature, out superSlayers, out lesserSlayers);
+
+            List<string> allSlayers = new List<string>();
+            foreach (string s in superSlayers) allSlayers.Add(s + " (Super)");
+            foreach (string s in lesserSlayers) allSlayers.Add(s);
+
+            AddLabel(c1X, miscY + 125, C_WHITE, "Slayer Vulnerabilities");
+
+            if (allSlayers.Count == 0)
+            {
+                AddLabel(c1X + 140, miscY + 125, C_WHITE, "None");
+            }
+            else
+            {
+                // First slayer on the same row as the label; subsequent ones below it,
+                // all still aligned to the second-column X position.
+                AddLabel(c1X + 140, miscY + 125, C_WHITE, allSlayers[0]);
+
+                for (int i = 1; i < allSlayers.Count; i++)
+                    AddLabel(c1X + 140, miscY + 125 + (i * 20), C_WHITE, allSlayers[i]);
+            }
+
             // ------------------------------------------------------------------------
             // FOOTER & TRAINING
             // ------------------------------------------------------------------------
-            int footerY = height - 60;
+            int footerY = height - 50;
             DrawDivider(20, footerY - 10, width - 40);
 
             if (m_Creature.Controlled && m_Creature.ControlMaster == User)
@@ -526,6 +549,38 @@ namespace Server.Mobiles
             if ((food & FoodType.Eggs) != 0) foods.Add("Eggs");
             if ((food & FoodType.Gold) != 0) foods.Add("Gold");
             return foods.Count == 0 ? "Unknown" : String.Join(", ", foods);
+        }
+
+        // Collects the super slayer(s) and lesser slayer(s) that affect the given creature.
+        // Reads from SlayerGroup.Groups — see SlayerGroup.cs for the definitions.
+        private void GetSlayerInfo(BaseCreature bc, out List<string> superSlayers, out List<string> lesserSlayers)
+        {
+            superSlayers = new List<string>();
+            lesserSlayers = new List<string>();
+
+            if (bc == null) return;
+
+            foreach (SlayerGroup group in SlayerGroup.Groups)
+            {
+                if (group.Super != null && group.Super.Slays(bc))
+                {
+                    string formatted = FormatAbilityName(group.Super.Name.ToString());
+                    if (!superSlayers.Contains(formatted))
+                        superSlayers.Add(formatted);
+                }
+
+                if (group.Entries != null)
+                {
+                    foreach (SlayerEntry entry in group.Entries)
+                    {
+                        if (!entry.Slays(bc)) continue;
+
+                        string formatted = FormatAbilityName(entry.Name.ToString());
+                        if (!lesserSlayers.Contains(formatted))
+                            lesserSlayers.Add(formatted);
+                    }
+                }
+            }
         }
     }
 }

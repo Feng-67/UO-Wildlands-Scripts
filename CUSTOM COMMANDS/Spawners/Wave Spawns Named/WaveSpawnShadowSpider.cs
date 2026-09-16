@@ -41,23 +41,23 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(DreadSpider), 20)),
+                    (typeof(DreadSpider), 40)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(Malefic), 5)),
+                    (typeof(Malefic), 20)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(ColossusGuardian), 10)),
 
                 // Wave 4
                 BuildWave(
-                    (typeof(Silk), 10)),
+                    (typeof(Silk), 20)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(Balron), 10))
+                    (typeof(Balron), 20))
             };
         }
 
@@ -210,7 +210,7 @@ namespace Server.Items
                 int nextWave = _currentWave + 1;
                 if (nextWave >= Waves.Length)
                 {
-                    BroadcastLocal("ALL WAVES DEFEATED! A CRATURE APPROACHES...", 0x22);
+                    BroadcastLocal("ALL WAVES DEFEATED! A CREATURE APPROACHES...", 0x22);
 
                     // Lightning strikes over the next 6 seconds before the boss spawns
                     for (int i = 0; i < 6; i++)

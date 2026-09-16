@@ -41,23 +41,23 @@ namespace Server.Items
             {
                 // Wave 1
                 BuildWave(
-                    (typeof(CrystalDaemon), 20)),
+                    (typeof(CrystalDaemon), 40)),
 
                 // Wave 2
                 BuildWave(
-                    (typeof(CrystalLatticeSeeker), 5)),
+                    (typeof(CrystalLatticeSeeker), 10)),
 
                 // Wave 3
                 BuildWave(
-                    (typeof(ColossusGuardian), 5)),
+                    (typeof(ColossusGuardian), 10)),
 
                 // Wave 4
                 BuildWave(
-                    (typeof(CrystalHydra), 10)),
+                    (typeof(CrystalHydra), 20)),
 
                 // Wave 5
                 BuildWave(
-                    (typeof(UnfrozenMummy), 10))
+                    (typeof(UnfrozenMummy), 20))
             };
         }
 

@@ -19,6 +19,8 @@ namespace Server.Gumps
         {
             // Change AccessLevel.Player to AccessLevel.Administrator
             CommandSystem.Register("mycommands", AccessLevel.Administrator, new CommandEventHandler(MyCommands_OnCommand));
+
+            CommandSystem.Register("gm", AccessLevel.Administrator, new CommandEventHandler(MyCommands_OnCommand));
         }
 
         [Usage("mycommands")]

@@ -6,6 +6,11 @@
 This repository contains **only the custom files** – no ServUO core.  
 These files are designed to be added to an existing ServUO installation.
 
+## Support Me
+
+If you find my work useful, you can support me here:
+
+[![Donate](https://img.shields.io/badge/Donate-Stripe-635BFF?style=for-the-badge&logo=stripe&logoColor=white)](https://donate.stripe.com/14A14mfx08GL2fS8M63ZK00)
 ---
 
 ## What's Inside

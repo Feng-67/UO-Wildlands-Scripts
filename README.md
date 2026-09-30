@@ -6,6 +6,9 @@
 This repository contains **only the custom files** – no ServUO core.  
 These files are designed to be added to an existing ServUO installation.
 
+**This repository is archived and not actively maintained.**  
+For an active alternative, please see [UO Wildlands Scripts-ModernUO](https://github.com/Feng-67/UO-Wildlands-Scripts-ModernUO.git)
+
 ## Support Me
 
 If you find my work useful, you can support me here:
